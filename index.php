@@ -37,13 +37,6 @@ print '<html> <head> <title>CommonsHelper 2</title> <meta http-equiv="Content-Ty
 print "<table style='background-color:#BAD0EF'><tr><td rowspan='2' nowrap><h1 style='margin-top:0px;margin-bottom:0px;padding-bottom:0px;padding-right:5px'>CommonsHelper 2</h1></td>" ;
 print "<td valign='bottom' width='100%'><b><small>A tool to transfer files from Wikimedia projects to Wikimedia Commons</small></b>" ;
 print "<br/><small><i>Change the <a href='http://meta.wikipedia.org/wiki/CommonsHelper2/Data_{$language}.{$project}'>category and template settings</a> for {$language}.{$project}</i></small>";
-/*print " [<a href='http://meta.wikipedia.org/wiki/CatScan2/{$lil}'><small>{$this->loc['manual']}</small></a>]" ;
-print " [<a href='{$this->i18n_url}#{$uil}'><small>{$this->loc['interface_text']}</small></a>]</td></tr><tr><td>" ;
-print "{$this->loc['interface_language']} : " ;
-foreach ( $this->available_interface_languages AS $l ) {
-	if ( $l == $this->interface_language ) print " [<small><b>" . strtoupper ( $l ) . "</b></small></a>]" ;
-	else print " [<a href='$script?interface_language=$l'><small>" . strtoupper ( $l ) . "</small></a>]" ;
-}*/
 print "</td></table>" ;
 
 $thumbnail_size = 128 ;
