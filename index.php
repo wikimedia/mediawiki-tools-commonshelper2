@@ -42,9 +42,16 @@ header('Content-type: text/html; charset=utf-8');
 <body>
 <table style='background-color:#BAD0EF'>
 <tr>
-<td rowspan='2' nowrap><h1 style='margin-top:0px;margin-bottom:0px;padding-bottom:0px;padding-right:5px'>CommonsHelper 2</h1></td>
-<td valign='bottom' width='100%'><b><small>A tool to transfer files from Wikimedia projects to Wikimedia Commons</small></b>
-<br/><small><i>Change the <a href='http://meta.wikipedia.org/wiki/CommonsHelper2/Data_<?PHP echo $language.'.'.$project; ?>'>category and template settings</a> for <?PHP echo $language.'.'.$project; ?></i></small>
+<td rowspan='2' nowrap>
+<h1 style='margin-top:0px;margin-bottom:0px;padding-bottom:0px;padding-right:5px'>CommonsHelper 2</h1>
+</td>
+<td width='50%' valign='bottom'>
+<b><small>A tool to transfer files from Wikimedia projects to Wikimedia Commons</small></b>
+<br />
+<small><i>Change the <a href='http://meta.wikipedia.org/wiki/CommonsHelper2/Data_<?PHP echo $language.'.'.$project; ?>'>category and template settings</a> for <?PHP echo $language.'.'.$project; ?></i></small>
+</td>
+<td align="right" width='50%' valign='bottom'>
+<small><a href='https://jira.toolserver.org/browse/CHTWO'>Report an Bug or Suggest Feature</a></small>
 </td>
 </tr>
 </table>
@@ -135,11 +142,12 @@ if ( $ch->seen_bad_category ) {
 
 
 // Regenerate wiki text from XML tree
-$new_wiki = "{BotMoveToCommons|{$language}.{$project}|year={{subst:CURRENTYEAR}}|month={{subst:CURRENTMONTHNAME}}|day={{subst:CURRENTDAY}}}}\n" ;
+$new_wiki = "{{BotMoveToCommons|{$language}.{$project}|year={{subst:CURRENTYEAR}}|month={{subst:CURRENTMONTHNAME}}|day={{subst:CURRENTDAY}}}}\n" ;
 
 $x2w = new XML2wiki () ;
 $new_wiki .= $x2w->convert ( $xml ) ;
 $new_wiki .= "\n\n" . $ii_local->get_upload_history () ;
+
 
 // Append CheckUsage/WikiSense categories
 if ( $use_checkusage ) { // UNTESTED
@@ -159,21 +167,30 @@ if ( count ( $ch->errors ) > 0 ) {
 	$allow_upload = false ;
 }
 
+$new_wiki = preg_replace("#\[\[Category:Hidden categories\]\]#", "", $new_wiki);
 
 $limg = $ii_local->get_thumbnail_img ( $thumbnail_size ) ;
 $style = "background:#D0E6FF;padding:2px;border:2px solid #DDDDDD;width:100%" ;
 
-print "<form method='post' action='http://commons.wikimedia.org/w/index.php?title=Special:Upload'>" ;
-print "<table style='width:100%'><tr><td style='width:100%'>" ;
-print "<h3>Original wikitext</h3><textarea rows='15' style='$style;font-size:80%'>" . htmlspecialchars ( $orig_wiki ) . "</textarea>" ;
-print "<h3>New wikitext</h3><textarea rows='20' style='$style' name='wpUploadDescription'>" . htmlspecialchars ( $new_wiki ) . "</textarea>" ;
-print "</td><td nowrap valign='top' style='padding-left:10px'>$limg</td></tr>" ;
-print "</table>" ;
+?>
+<form method='post' action='http://commons.wikimedia.org/w/index.php?title=Special:Upload'>
+<table style='width:100%'>
+<tr>
+<td style='width:100%'>
+<h3>Original wikitext</h3>
+<textarea rows='15' style='$style;font-size:80%'><?PHP echo htmlspecialchars ( $orig_wiki ); ?></textarea>
+<h3>New wikitext</h3>
+<textarea rows='20' style='$style' name='wpUploadDescription'><?PHP echo htmlspecialchars ( $new_wiki ); ?></textarea>
+</td>
+<td nowrap valign='top' style='padding-left:10px'><?PHP echo $limg; ?></td>
+</tr>
+</table>
 
-print "New filename : <input type='text' name='wpDestFile' size='80' value='" . addslashes ( $target_file ) . "' />" ;
-print "<p>For manual upload, edit the above text (if necessary), save <a href='{$ii_local->idata['url']}'>the file</a> on your computer, then " ;
-print "<input type='submit' name='up' value='upload it to Commons'/>.</p>" ;
-print "</form>" ;
+New filename : <input type='text' name='wpDestFile' size='80' value='<?PHP echo addslashes ( $target_file ); ?>' />
+<p>For manual upload, edit the above text (if necessary), save <a href='<?PHP echo $ii_local->idata['url'] ?>'>the file</a> on your computer, then 
+<input type='submit' name='up' value='upload it to Commons'/>.</p>
+</form>
+<?PHP
 
 
 // Try direct upload
