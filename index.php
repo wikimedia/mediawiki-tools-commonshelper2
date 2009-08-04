@@ -178,9 +178,9 @@ $style = "background:#D0E6FF;padding:2px;border:2px solid #DDDDDD;width:100%" ;
 <tr>
 <td style='width:100%'>
 <h3>Original wikitext</h3>
-<textarea rows='15' style='$style;font-size:80%'><?PHP echo htmlspecialchars ( $orig_wiki ); ?></textarea>
+<textarea rows='15' cols='125' style='$style;font-size:80%'><?PHP echo htmlspecialchars ( $orig_wiki ); ?></textarea>
 <h3>New wikitext</h3>
-<textarea rows='20' style='$style' name='wpUploadDescription'><?PHP echo htmlspecialchars ( $new_wiki ); ?></textarea>
+<textarea rows='20' cols='125' style='$style' name='wpUploadDescription'><?PHP echo htmlspecialchars ( $new_wiki ); ?></textarea>
 </td>
 <td nowrap valign='top' style='padding-left:10px'><?PHP echo $limg; ?></td>
 </tr>
