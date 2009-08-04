@@ -8,7 +8,7 @@ class ImageInfo {
 	public $thumbnail_width ;
 	public $thumbnail_height ;
 
-	function ImageInfo ( $l , $p , $i ) {
+	function __construct ( $l , $p , $i ) {
 		$this->language = $l ;
 		$this->project = $p ;
 		$this->image = $i ;
@@ -149,18 +149,20 @@ class ImageInfo {
 	}
 	
 	// Untested!!!
-	function common_sense () {
+	function common_sense ( $lang = '', $image = '' ) {
 		global $forbidden_commonsense_categories ;
 		
-		$lang2 = $this->language ;
+		$lang2 = ( $lang == '' )? $this->language : $lang ;
 		$go = 'clean' ;
 		if ( $this->language != 'commons' ) {
 			$lang2 .= '.wikipedia' ;
 			$go = 'move' ;
 		}
 		
+		$image = ( $image == '' )? $this->image : $image ;
+		
 		$url = 'http://tools.wikimedia.de/~daniel/WikiSense/CommonSense.php?u=en&' .
-			'i=' . urlencode ( $this->image ) .
+			'i=' . urlencode ( $image ) .
 			'&kw=' . 
 			'&r=on' .
 			'&p=_20' .
@@ -195,7 +197,7 @@ class ImageInfo {
 		if ( !isset ( $cats['CATEGORIES'] ) ) return array() ;
 		return $cats['CATEGORIES'] ;
 
-		return $cats ;
+		// return $cats ;
 	}
 
 

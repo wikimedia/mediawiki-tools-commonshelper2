@@ -2,9 +2,11 @@
 
 
 function get_request ( $key , $default = '' ) {
-	if ( isset ( $_REQUEST[$key] ) ) return $_REQUEST[$key] ;
+	$request = $_POST + $_GET;
+	if ( isset ( $request[$key] ) AND $request[$key] != "" ) return $request[$key] ;
 	return $default ;
 }
+
 
 
 function show_error ( $text ) {
@@ -58,25 +60,24 @@ function endthis () {
 }
 
 
-function do_post_request($url, $data, $optional_headers = null)
-{
- $params = array('http' => array(
+function do_post_request($url, $data, $optional_headers = null) {
+	$params = array('http' => array(
 			  'method' => 'POST',
 			  'content' => http_build_query ( $data ) 
 		   ));
- if ($optional_headers !== null) {
-	$params['http']['header'] = $optional_headers;
- }
- $ctx = stream_context_create($params);
- $fp = @fopen($url, 'rb', false, $ctx);
- if (!$fp) {
-	throw new Exception("Problem with $url, $php_errormsg");
- }
- $response = @stream_get_contents($fp);
- if ($response === false) {
-	throw new Exception("Problem reading data from $url, $php_errormsg");
- }
- return $response;
+	if ($optional_headers !== null) {
+		$params['http']['header'] = $optional_headers;
+	}
+	$ctx = stream_context_create($params);
+	$fp = @fopen($url, 'rb', false, $ctx);
+	if (!$fp) {
+		throw new Exception("Problem with $url, $php_errormsg");
+	}
+	$response = @stream_get_contents($fp);
+	if ($response === false) {
+		throw new Exception("Problem reading data from $url, $php_errormsg");
+	}
+	return $response;
 }
 
 function verify_tusc ( $tusc_user , $tusc_password ) {

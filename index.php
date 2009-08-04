@@ -32,12 +32,24 @@ $remove_existing_categories = get_request ( 'remove_existing_categories' , false
 //$overwrite_existing = get_request ( 'overwrite_existing' , false ) ;
 
 header('Content-type: text/html; charset=utf-8');
-print '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' . "\n\n" ;
-print '<html> <head> <title>CommonsHelper 2</title> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /></head><body>' ;
-print "<table style='background-color:#BAD0EF'><tr><td rowspan='2' nowrap><h1 style='margin-top:0px;margin-bottom:0px;padding-bottom:0px;padding-right:5px'>CommonsHelper 2</h1></td>" ;
-print "<td valign='bottom' width='100%'><b><small>A tool to transfer files from Wikimedia projects to Wikimedia Commons</small></b>" ;
-print "<br/><small><i>Change the <a href='http://meta.wikipedia.org/wiki/CommonsHelper2/Data_{$language}.{$project}'>category and template settings</a> for {$language}.{$project}</i></small>";
-print "</td></table>" ;
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html> 
+<head> 
+<title>CommonsHelper 2</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<table style='background-color:#BAD0EF'>
+<tr>
+<td rowspan='2' nowrap><h1 style='margin-top:0px;margin-bottom:0px;padding-bottom:0px;padding-right:5px'>CommonsHelper 2</h1></td>
+<td valign='bottom' width='100%'><b><small>A tool to transfer files from Wikimedia projects to Wikimedia Commons</small></b>
+<br/><small><i>Change the <a href='http://meta.wikipedia.org/wiki/CommonsHelper2/Data_<?PHP echo $language.'.'.$project; ?>'>category and template settings</a> for <?PHP echo $language.'.'.$project; ?></i></small>
+</td>
+</tr>
+</table>
+<?PHP
+
 
 $thumbnail_size = 128 ;
 if ( $target_file == '' ) $target_file = $file ;

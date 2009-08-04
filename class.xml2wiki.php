@@ -7,7 +7,7 @@ class XML2wiki {
 	public $pretemplate ;
 	public $remove_empty_fields ;
 	
-	function XML2wiki () {
+	function __construct () {
 		$this->prelist = '' ;
 		$this->pretemplate = '' ;
 		$this->remove_empty_fields = false ;

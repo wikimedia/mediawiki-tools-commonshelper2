@@ -12,7 +12,7 @@ class CommonsHelper {
 	public $seen_bad_template ;
 	public $seen_bad_category ;
 	
-	function CommonsHelper ( $l , $p , $f ) {
+	function __construct ( $l , $p , $f ) {
 		$this->language = $l ;
 		$this->project = $p ;
 		$this->file = $f ;
