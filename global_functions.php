@@ -1,13 +1,10 @@
 <?PHP
 
-
 function get_request ( $key , $default = '' ) {
 	$request = $_POST + $_GET;
 	if ( isset ( $request[$key] ) AND $request[$key] != "" ) return $request[$key] ;
 	return $default ;
 }
-
-
 
 function show_error ( $text ) {
 	print "<div style='border:2px solid #888888;margin:2px;padding:5px;font-size:150%;color:red;text-align:center'><b>ATTENTION</b> : $text</div>" ;
