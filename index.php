@@ -111,7 +111,7 @@ if ( $ii_commons->file_exists() ) {
 $orig_wiki = $ch->get_original_wikitext() ;
 
 $xml = $ch->get_xml () ;
-$ch->read_meta_data () ;
+$meta_data = $ch->read_meta_data () ;
 
 $allow_upload = false ;
 
