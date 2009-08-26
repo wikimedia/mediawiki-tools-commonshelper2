@@ -1,4 +1,4 @@
-<?PHP
+<?PHP 
 
 error_reporting ( E_ALL ) ;
 
