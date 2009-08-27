@@ -113,6 +113,10 @@ $orig_wiki = $ch->get_original_wikitext() ;
 $xml = $ch->get_xml () ;
 $meta_data = $ch->read_meta_data () ;
 
+if ( !$meta_data['return'] ) {
+	show_error ( 'No meta data found for the source wiki! <a href="'.$meta_data['url'].'">Link</a>' ) ;
+}
+
 $allow_upload = false ;
 
 $ch->iterate_tree ( $xml , 'TEMPLATE' , iterate_template ) ;
