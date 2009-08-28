@@ -267,8 +267,8 @@ class CommonsHelper {
 				}
 			}
 		}
-		if ( ( count( $this->meta_cat ) < 1 ) && ( count( $this->meta_tl ) < 1 ) ) return array( 'return' => false, 'url' => $url );
-		else if ( ( count( $this->meta_cat ) >= 1 ) && ( count( $this->meta_tl ) >= 1 ) ) return array( 'return' => true, 'url' => $url );
+		if ( ( count( $this->meta_cat ) < 1 ) && ( count( $this->meta_tl ) < 1 ) ) return array( 'return' => false, 'url' => str_replace( 'action=raw&', '', $url ) );
+		else if ( ( count( $this->meta_cat ) >= 1 ) && ( count( $this->meta_tl ) >= 1 ) ) return array( 'return' => true );
 	}
 
 	function strip_attr_quotes ( $attr ) {

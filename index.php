@@ -201,7 +201,8 @@ New filename : <input type='text' name='wpDestFile' size='80' value='<?PHP echo 
 if ( $use_tusc ) {
 	if ( verify_tusc ( $tusc_user , $tusc_password ) ) {
 		if ( $allow_upload ) {
-			do_direct_upload ( $language , $project , $file , $target_file , $ii_local->idata['url'] , $new_wiki ) ;
+			$end = do_direct_upload ( $language , $project , $file , $target_file , $ii_local->idata['url'] , $new_wiki ) ;
+			echo $end;
 		} else {
 			show_error ( "Cannot upload directly due to errors!" ) ;
 		}
