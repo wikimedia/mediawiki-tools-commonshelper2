@@ -26,6 +26,7 @@ $stage = get_request ( 'stage' ) ;
 $tusc_user = get_request ( 'tusc_user' ) ;
 $tusc_password = get_request ( 'tusc_password' ) ;
 
+$commons_to_project = get_request ( 'commons_to_project' , false ) ;
 $use_tusc = get_request ( 'use_tusc' , false ) ;
 $use_checkusage = get_request ( 'use_checkusage' , false ) ;
 $remove_existing_categories = get_request ( 'remove_existing_categories' , false ) ;
@@ -62,14 +63,20 @@ $thumbnail_size = 128 ;
 if ( $target_file == '' ) $target_file = $file ;
 
 // Initialize - do not query API or wiki2xml yet
-$ch = new CommonsHelper ( $language , $project , $file ) ;
-$ii_local = new ImageInfo ( $language , $project , $file ) ;
-$ii_commons = new ImageInfo ( 'commons' , 'wikimedia' , $target_file ) ;
+if( !$commons_to_project ) {
+	$ch = new CommonsHelper ( $language , $project , $file ) ;
+	$ii_local = new ImageInfo ( $language , $project , $file ) ;
+	$ii_commons = new ImageInfo ( 'commons' , 'wikimedia' , $target_file ) ;
+} else {
+	$ch = new CommonsHelper ( 'commons' , 'wikimedia' , $file ) ;
+	$ii_local = new ImageInfo ( 'commons' , 'wikimedia' , $file ) ;
+	$ii_commons = new ImageInfo ( $language , $project , $target_file ) ;
+}
 
 
 // Show initial form
 if ( $stage == '' ) {
-	if ( !isset ( $_REQUEST['use_checkusage'] ) ) $use_checkusage = true ;
+	$use_checkusage = get_request( use_checkusage, true ) ;
 	show_main_form () ;
 	endthis() ;
 }
@@ -83,22 +90,37 @@ if ( !$ii_local->file_exists() ) {
 
 
 // Check if inages exists at Commons under other name
-$alt = $ii_local->exists_elsewhere ( 'commons' , 'wikimedia' ) ;
-if ( $alt != '' ) {
-	$alt2 = array_pop ( explode ( ':' , $alt , 2 ) ) ;
-	$ii_commons = new ImageInfo ( 'commons' , 'wikimedia' , $alt2 ) ;
-	show_error ( "File already exists on Commons as \"<a href='http://commons.wikimedia.org/wiki/$alt'>$alt</a>\"!" ) ;
-	print "<table><tr><td>" ;
-	print $ii_local->get_thumbnail_img ( $thumbnail_size ) ;
-	print "</td><td>" ;
-	print $ii_commons->get_thumbnail_img ( $thumbnail_size ) ;
-	print "</td></tr></table>" ;
-	endthis() ;
+if( !$commons_to_project ) {
+	$alt = $ii_local->exists_elsewhere ( 'commons' , 'wikimedia' ) ;
+	if ( $alt != '' ) {
+		$alt2 = array_pop ( explode ( ':' , $alt , 2 ) ) ;
+		$ii_commons = new ImageInfo ( 'commons' , 'wikimedia' , $alt2 ) ;
+		show_error ( "File already exists on Commons as \"<a href='http://commons.wikimedia.org/wiki/$alt'>$alt</a>\"!" ) ;
+		print "<table><tr><td>" ;
+		print $ii_local->get_thumbnail_img ( $thumbnail_size ) ;
+		print "</td><td>" ;
+		print $ii_commons->get_thumbnail_img ( $thumbnail_size ) ;
+		print "</td></tr></table>" ;
+		endthis() ;
+	}
+} else {
+	$alt = $ii_local->exists_elsewhere ( $language , $project ) ;
+	if ( $alt != '' ) {
+		$alt2 = array_pop ( explode ( ':' , $alt , 2 ) ) ;
+		$ii_commons = new ImageInfo ( $language , $project , $alt2 ) ;
+		show_error ( "File already exists on the target wiki as \"<a href='http://{$language}.{$project}.org/wiki/$alt'>$alt</a>\"!" ) ;
+		print "<table><tr><td>" ;
+		print $ii_local->get_thumbnail_img ( $thumbnail_size ) ;
+		print "</td><td>" ;
+		print $ii_commons->get_thumbnail_img ( $thumbnail_size ) ;
+		print "</td></tr></table>" ;
+		endthis() ;
+	}
 }
 
 // Check if target file exists
 if ( $ii_commons->file_exists() ) {
-	show_error ( "Different target file exists on Commons under the same name!" ) ;
+	show_error ( "Different target file exists on the traget wiki under the same name!" ) ;
 	print "<div style='float:right'>" ;
 	print $ii_local->get_thumbnail_img ( $thumbnail_size ) ;
 	print $ii_commons->get_thumbnail_img ( $thumbnail_size ) ;
@@ -146,7 +168,11 @@ if ( $ch->seen_bad_category ) {
 
 
 // Regenerate wiki text from XML tree
-$new_wiki = "{{BotMoveToCommons|{$language}.{$project}|year={{subst:CURRENTYEAR}}|month={{subst:CURRENTMONTHNAME}}|day={{subst:CURRENTDAY}}}}\n" ;
+if( !$commons_to_project ) {
+	$new_wiki = "{{BotMoveToCommons|{$language}.{$project}|year={{subst:CURRENTYEAR}}|month={{subst:CURRENTMONTHNAME}}|day={{subst:CURRENTDAY}}}}\n" ;
+} else {
+	$new_wiki = "" ;
+}
 
 $x2w = new XML2wiki () ;
 $new_wiki .= $x2w->convert ( $xml ) ;
@@ -176,8 +202,11 @@ $new_wiki = preg_replace("#\[\[Category:Hidden categories\]\]#", "", $new_wiki);
 $limg = $ii_local->get_thumbnail_img ( $thumbnail_size ) ;
 $style = "background:#D0E6FF;padding:2px;border:2px solid #DDDDDD;width:100%" ;
 
+if( !$commons_to_project ) $url = 'http://commons.wikimedia.org/w/index.php?title=Special:Upload'; 
+else $url = 'http://commons.wikimedia.org/w/index.php?title=Special:Upload';
+
 ?>
-<form method='post' action='http://commons.wikimedia.org/w/index.php?title=Special:Upload'>
+<form method='post' action='<?PHP echo $url; ?>'>
 <table style='width:100%'>
 <tr>
 <td style='width:100%'>
@@ -192,22 +221,26 @@ $style = "background:#D0E6FF;padding:2px;border:2px solid #DDDDDD;width:100%" ;
 
 New filename : <input type='text' name='wpDestFile' size='80' value='<?PHP echo addslashes ( $target_file ); ?>' />
 <p>For manual upload, edit the above text (if necessary), save <a href='<?PHP echo $ii_local->idata['url'] ?>'>the file</a> on your computer, then 
-<input type='submit' name='up' value='upload it to Commons'/>.</p>
+<input type='submit' name='up' value='upload it'/>.</p>
 </form>
 <?PHP
 
 
 // Try direct upload
 if ( $use_tusc ) {
-	if ( verify_tusc ( $tusc_user , $tusc_password ) ) {
-		if ( $allow_upload ) {
-			$end = do_direct_upload ( $language , $project , $file , $target_file , $ii_local->idata['url'] , $new_wiki ) ;
-			echo $end;
+	if( !$commons_to_project ) {
+		if ( verify_tusc ( $tusc_user , $tusc_password ) ) {
+			if ( $allow_upload ) {
+				$end = do_direct_upload ( $language , $project , $file , $target_file , $ii_local->idata['url'] , $new_wiki ) ;
+				echo $end;
+			} else {
+				show_error ( "Cannot upload directly due to errors!" ) ;
+			}
 		} else {
-			show_error ( "Cannot upload directly due to errors!" ) ;
+			show_error ( "TUSC verification failed!" ) ;
 		}
 	} else {
-		show_error ( "TUSC verification failed!" ) ;
+		show_error ( "Direct upload works only at commons!" ) ;
 	}
 }
 

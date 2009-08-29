@@ -94,9 +94,12 @@ class ImageInfo {
 		$d = array_shift ( $d ) ;
 		$d = $d['imageinfo'] ;
 		
+		$source_name = ($this->language == 'commons' && $this->project == 'wikimedia')? 'Commons' : {$this->language}.'.'.{$this->project};
+		$target_name = ($this->language == 'commons' && $this->project == 'wikimedia')? 'this project' : 'Commons';
+		
 		$desc_url = $this->get_description_page_url() ;
 		$w = "== Original upload history ==\n" ;
-		$w .= "This file was originally uploaded at {$this->language}.{$this->project} as [$desc_url {$this->image}], before it was transfered to Commons.\n" ;
+		$w .= "This file was originally uploaded at {$source_name} as [$desc_url {$this->image}], before it was transfered to {$target_name}.\n" ;
 		$w .= "{| border='1'\n!Upload date!!User!!Bytes!!Dimensions!!Comment\n" ;
 		
 		foreach ( $d AS $u ) {

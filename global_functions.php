@@ -16,16 +16,20 @@ function show_main_form () {
 	global $use_checkusage , $remove_existing_categories ;//, $overwrite_existing ;
 	
 //	$cb_overwrite_existing = $overwrite_existing ? ' checked' : '' ;
-	$cb_remove_existing_categories = $remove_existing_categories ? ' checked' : '' ;
-	$cb_use_checkusage = $use_checkusage ? ' checked' : '' ;
-	$cb_use_tusc = $use_tusc ? ' checked' : '' ;
+	$cb_commons_to_project = $commons_to_project ? ' checked=checked' : '' ;
+	$cb_remove_existing_categories = $remove_existing_categories ? ' checked=checked' : '' ;
+	$cb_use_checkusage = $use_checkusage ? ' checked=checked' : '' ;
+	$cb_use_tusc = $use_tusc ? ' checked=checked' : '' ;
 	
 	print "<form method='post' action='./index.php'>
 <table border='1'>
 <tr><th>Language</th><td><input type='text' size='20' name='language' value='$language' /></td></tr>
 <tr><th>Project</th><td><input type='text' size='20' name='project' value='$project' /></td></tr>
-<tr><th>File in project</th><td><input type='text' size='50' name='file' value='$file' /></td></tr>
-<tr><th>File on Commons</th><td><input type='text' size='50' name='target_file' value='$target_file' /></td></tr>
+<tr><th>Source-File</th><td><input type='text' size='50' name='file' value='$file' /></td></tr>
+<tr><th>Target-File</th><td><input type='text' size='50' name='target_file' value='$target_file' /></td></tr>
+
+<tr><th>Commons to project</th><td><input type='checkbox' name='commons_to_project' id='commons_to_project' value='1' $cb_commons_to_project />
+<label for='commons_to_project'>Move file from commons to project</label></td></tr>
 
 <tr><th>Categories</th><td><input type='checkbox' name='remove_existing_categories' id='remove_existing_categories' value='1' $cb_remove_existing_categories />
 <label for='remove_existing_categories'>Remove existing categories</label></td></tr>

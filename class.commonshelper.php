@@ -217,6 +217,7 @@ class CommonsHelper {
 
 
 	function read_meta_data () {
+		if( $this->language == 'commons' && $this->project == 'wikimedia' ) return array( 'return' => true );	
 		$this->get_namespaces() ;
 		
 		$url = "http://meta.wikipedia.org/w/index.php?action=raw&title=CommonsHelper2/Data_" . $this->language . "." . $this->project ;
