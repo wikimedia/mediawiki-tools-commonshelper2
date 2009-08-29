@@ -94,7 +94,7 @@ class ImageInfo {
 		$d = array_shift ( $d ) ;
 		$d = $d['imageinfo'] ;
 		
-		$source_name = ($this->language == 'commons' && $this->project == 'wikimedia')? 'Commons' : {$this->language}.'.'.{$this->project};
+		$source_name = ($this->language == 'commons' && $this->project == 'wikimedia')? 'Commons' : $this->language.'.'.$this->project;
 		$target_name = ($this->language == 'commons' && $this->project == 'wikimedia')? 'this project' : 'Commons';
 		
 		$desc_url = $this->get_description_page_url() ;

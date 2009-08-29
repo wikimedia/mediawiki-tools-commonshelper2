@@ -76,7 +76,7 @@ if( !$commons_to_project ) {
 
 // Show initial form
 if ( $stage == '' ) {
-	$use_checkusage = get_request( use_checkusage, true ) ;
+	$use_checkusage = get_request( 'use_checkusage', true ) ;
 	show_main_form () ;
 	endthis() ;
 }

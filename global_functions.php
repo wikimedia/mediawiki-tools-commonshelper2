@@ -13,7 +13,7 @@ function show_error ( $text ) {
 function show_main_form () {
 	global $language , $project , $file , $target_file ;
 	global $tusc_user , $tusc_password , $use_tusc ;
-	global $use_checkusage , $remove_existing_categories ;//, $overwrite_existing ;
+	global $use_checkusage , $remove_existing_categories, $commons_to_project ;//, $overwrite_existing ;
 	
 //	$cb_overwrite_existing = $overwrite_existing ? ' checked' : '' ;
 	$cb_commons_to_project = $commons_to_project ? ' checked=checked' : '' ;
