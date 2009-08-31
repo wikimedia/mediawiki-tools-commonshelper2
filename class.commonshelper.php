@@ -32,14 +32,14 @@ class CommonsHelper {
 	}
 
 	function get_xml_url () {
-		$url = "http://toolserver.org/~magnus/wiki2xml/w2x.php?doit=1&whatsthis=articlelist&site={$this->language}.{$this->project}.org/w&output_format=xml&use_templates=none&text=" . urlencode ( $this->namespace_prefix . $this->file ) ;
+		$url = "http://toolserver.org/~jan/wiki2xml/w2x.php?doit=1&whatsthis=articlelist&site={$this->language}.{$this->project}.org/w&output_format=xml&use_templates=none&text=" . urlencode ( $this->namespace_prefix . $this->file ) ;
 		return $url ;
 	}
 	
 	function get_xml ( $url = '' ) {
 		if ( $url == '' ) $url = $this->get_xml_url() ;
 		
-		$xml = file_get_contents ( $url ) ;
+		$xml = file_get_contents( $url ) ;
 
 		$cnt = 0 ;
 		$t = '' ;
@@ -112,7 +112,8 @@ class CommonsHelper {
 		while ( $count < count ( $xml_array ) ) {
 			$x = $xml_array[$count++] ;
 			$y = explode ( '>' , $x , 2 ) ;
-			if ( count ( $y ) == 0 ) $y[] = '' ;
+			if ( count ( $y ) == 0 ) { $y[0] = '' ; $y[1] = '' ; }
+			if ( count ( $y ) == 1 ) { $y[1] = '' ; }
 			$tag = trim ( $y[0] ) ;
 			$text = $y[1] ;
 

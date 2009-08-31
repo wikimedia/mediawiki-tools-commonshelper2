@@ -141,8 +141,8 @@ if ( !$meta_data['return'] ) {
 
 $allow_upload = false ;
 
-$ch->iterate_tree ( $xml , 'TEMPLATE' , iterate_template ) ;
-$ch->iterate_tree ( $xml , 'LINK' , iterate_link ) ;
+$ch->iterate_tree ( $xml , 'TEMPLATE' , 'iterate_template' ) ;
+$ch->iterate_tree ( $xml , 'LINK' , 'iterate_link' ) ;
 
 // Using API to find nested templates
 $used_templates = $ii_local->get_used_templates() ;

@@ -25,7 +25,7 @@ class XML2wiki {
 		return substr ( $attr , 1 , -1 ) ;
 	}
 	
-	function get_link_or_template ( $xml , $is_template , $parent ) {
+	function get_link_or_template ( $xml , $is_template , $parent = NULL ) {
 		if ( $is_template ) $pt = substr ( $this->pretemplate , 0 , -1 ) ;
 		$ret = Array() ;
 		$trail = '' ;
@@ -38,6 +38,7 @@ class XML2wiki {
 		}
 		foreach ( $xml AS $x ) {
 			$sub = $this->getsub ( $x ) ;
+			if( !isset( $x['n'] ) ) $x['n'] = '';
 			if ( $x['n'] == 'TARGET' ) {
 				if ( $is_template ) $ret[] = "{{" . $sub ;
 				else $ret[] = "[[$sub" ;
