@@ -72,6 +72,8 @@ while ( <META> ) {
 	$description .= $_ ;
 }
 close META ;
+chomp $local_file ;
+chomp $new_file_name ;
 
 # Post-process
 $new_file_name =~ tr/ /_/ ;

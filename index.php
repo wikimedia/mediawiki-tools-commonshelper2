@@ -89,7 +89,7 @@ if ( !$ii_local->file_exists() ) {
 }
 
 
-// Check if inages exists at Commons under other name
+// Check if images exists at Commons under other name
 if( !$commons_to_project ) {
 	$alt = $ii_local->exists_elsewhere ( 'commons' , 'wikimedia' ) ;
 	if ( $alt != '' ) {
