@@ -9,7 +9,7 @@
 #
 # Set the username and password below:
 
-$username = "File Upload Bot (Magnus Manske)";
+$username = "CommonsHelper2 Bot";
 
 open FILE , "../upload_bot_key.txt" ;
 $password = <FILE>;
