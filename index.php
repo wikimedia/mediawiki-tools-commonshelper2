@@ -120,7 +120,7 @@ if( !$commons_to_project ) {
 
 // Check if target file exists
 if ( $ii_commons->file_exists() ) {
-	show_error ( "Different target file exists on the traget wiki under the same name!" ) ;
+	show_error ( "Different target file exists on the target wiki under the same name!" ) ;
 	print "<div style='float:right'>" ;
 	print $ii_local->get_thumbnail_img ( $thumbnail_size ) ;
 	print $ii_commons->get_thumbnail_img ( $thumbnail_size ) ;

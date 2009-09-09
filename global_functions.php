@@ -126,7 +126,7 @@ function do_direct_upload ( $lang , $project , $image , $newname , $external_url
 	$desc = str_replace ( "\r" , "" , $desc ) ;
 	$desc = str_replace ( "\n>" , "\n >" , $desc ) ;
 	$desc = str_replace ( "\n\n\n" , "\n\n" , $desc ) ;
-	$desc = "\n{{BotMoveToCommons|$lang.$project|year={{subst:CURRENTYEAR}}|month={{subst:CURRENTMONTHNAME}}|day={{subst:CURRENTDAY}}}}\n$desc" ;
+	$desc = "\n$desc" ;
 	
 	// Create meta file
 	$meta_file = $temp_dir . '/meta.txt' ;
