@@ -231,6 +231,7 @@ New filename : <input type='text' name='wpDestFile' size='80' value='<?PHP echo 
 <?PHP
 } else {
 ?>
+<?PHP if( $raw_error != '' ) echo $raw_error.'<br />'; ?>
 New Wikitext:
 <br /><br />
 <!-- start new wikitext --><?PHP echo htmlspecialchars ( $new_wiki ); ?><!-- end new wikitext -->
