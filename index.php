@@ -32,6 +32,10 @@ $use_checkusage = get_request ( 'use_checkusage' , false ) ;
 $remove_existing_categories = get_request ( 'remove_existing_categories' , false ) ;
 //$overwrite_existing = get_request ( 'overwrite_existing' , false ) ;
 
+$raw = get_request ( 'raw' , 0 ) ;
+$raw_error = '';
+
+if( $raw == 0 ) {
 header('Content-type: text/html; charset=utf-8');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -57,7 +61,7 @@ header('Content-type: text/html; charset=utf-8');
 </tr>
 </table>
 <?PHP
-
+}
 
 $thumbnail_size = 128 ;
 if ( $target_file == '' ) $target_file = $file ;
@@ -148,12 +152,12 @@ $ch->iterate_tree ( $xml , 'LINK' , 'iterate_link' ) ;
 $used_templates = $ii_local->get_used_templates() ;
 $ch->check_template_list ( $used_templates ) ;
 
-if ( !$ch->seen_good_template ) {
-	show_error ( "No good templates found!" ) ;
+if ( !$ch->seen_good_template && !$commons_to_project ) {
+	show_error ( 'Meta-Data: No good templates found! <a href="'.$meta_data['url'].'">Link</a>' ) ;
 } else $allow_upload = true ;
 
-if ( $ch->seen_bad_template ) {
-	show_error ( "Bad template found!" ) ;
+if ( $ch->seen_bad_template && !$commons_to_project ) {
+	show_error ( 'Meta-Data: Bad template found! <a href="'.$meta_data['url'].'">Link</a>' ) ;
 	$allow_upload = false ;
 }
 
@@ -161,8 +165,8 @@ if ( $ch->seen_bad_template ) {
 $used_categories = $ii_local->get_used_categories() ;
 $ch->check_category_list ( $used_categories ) ;
 
-if ( $ch->seen_bad_category ) {
-	show_error ( "Bad categories found!" ) ;
+if ( $ch->seen_bad_category && !$commons_to_project ) {
+	show_error ( 'Meta-Data: Bad categories found! <a href="'.$meta_data['url'].'">Link</a>' ) ;
 	$allow_upload = false ;
 }
 
@@ -205,6 +209,7 @@ $style = "background:#D0E6FF;padding:2px;border:2px solid #DDDDDD;width:100%" ;
 if( !$commons_to_project ) $url = 'http://commons.wikimedia.org/w/index.php?title=Special:Upload'; 
 else $url = 'http://commons.wikimedia.org/w/index.php?title=Special:Upload';
 
+if( $raw == 0 ) {
 ?>
 <form method='post' action='<?PHP echo $url; ?>'>
 <table style='width:100%'>
@@ -224,7 +229,17 @@ New filename : <input type='text' name='wpDestFile' size='80' value='<?PHP echo 
 <input type='submit' name='up' value='upload it'/>.</p>
 </form>
 <?PHP
-
+} else {
+?>
+New Wikitext:
+<br /><br />
+<!-- start new wikitext --><?PHP echo htmlspecialchars ( $new_wiki ); ?><!-- end new wikitext -->
+<br /><br />
+New Filename:
+<br /><br /> 
+<!-- start new filename --><?PHP echo addslashes ( $target_file ); ?><!-- end new filename -->
+<?PHP
+}
 
 // Try direct upload
 if ( $use_tusc ) {
@@ -234,7 +249,7 @@ if ( $use_tusc ) {
 				$end = do_direct_upload ( $language , $project , $file , $target_file , $ii_local->idata['url'] , $new_wiki ) ;
 				echo $end;
 			} else {
-				show_error ( "Cannot upload directly due to errors!" ) ;
+				show_error ( "Cannot upload directly because there are problem with the meta data (see above)!" ) ;
 			}
 		} else {
 			show_error ( "TUSC verification failed!" ) ;

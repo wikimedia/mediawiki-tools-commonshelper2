@@ -7,7 +7,9 @@ function get_request ( $key , $default = '' ) {
 }
 
 function show_error ( $text ) {
-	print "<div style='border:2px solid #888888;margin:2px;padding:5px;font-size:150%;color:red;text-align:center'><b>ATTENTION</b> : $text</div>" ;
+	global $raw, $raw_error;
+	if( $raw == 0 ) print "<div style='border:2px solid #888888;margin:2px;padding:5px;font-size:150%;color:red;text-align:center'><b>ATTENTION</b> : $text</div>" ;
+	else $raw_error .= "ATTENTION : $text<br />" ;
 }
 
 function show_main_form () {
@@ -21,7 +23,7 @@ function show_main_form () {
 	$cb_use_checkusage = $use_checkusage ? ' checked=checked' : '' ;
 	$cb_use_tusc = $use_tusc ? ' checked=checked' : '' ;
 	
-	print "<form method='post' action='./index.php'>
+	print "<form method='get' action='./index.php'>
 <table border='1'>
 <tr><th>Language</th><td><input type='text' size='20' name='language' value='$language' /></td></tr>
 <tr><th>Project</th><td><input type='text' size='20' name='project' value='$project' /></td></tr>

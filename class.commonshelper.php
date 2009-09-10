@@ -270,7 +270,7 @@ class CommonsHelper {
 			}
 		}
 		if ( ( count( $this->meta_cat ) < 1 ) && ( count( $this->meta_tl ) < 1 ) ) return array( 'return' => false, 'url' => str_replace( 'action=raw&', '', $url ) );
-		else if ( ( count( $this->meta_cat ) >= 1 ) && ( count( $this->meta_tl ) >= 1 ) ) return array( 'return' => true );
+		else if ( ( count( $this->meta_cat ) >= 1 ) && ( count( $this->meta_tl ) >= 1 ) ) return array( 'return' => true, 'url' => str_replace( 'action=raw&', '', $url ) );
 	}
 
 	function strip_attr_quotes ( $attr ) {
