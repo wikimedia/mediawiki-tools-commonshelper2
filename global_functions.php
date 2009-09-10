@@ -156,11 +156,39 @@ function do_direct_upload ( $lang , $project , $image , $newname , $external_url
 	// Output
 	$ret = "<h3>Output of upload bot</h3><pre>{$output}</pre>" ;
 	$ret .= "<p>The image should now be at <a target='blank' href='" ;
-	$ret .= get_wikipedia_url ( 'commons' , 'Image:'.$newname ) . "'>{$newname}</a>. " ;
+	$ret .= "http://commons.wikimedia.org/w/index.php?title=Image:".urlencode($newname)."'>{$newname}</a>. " ;
 	$ret .= "<a href=\"http://commons.wikimedia.org/w/index.php?action=edit&title=Image:$newname\" target=\"_blank\">Edit the new description page</a>." ;
 	return $ret ;	
 }
 
+function filter( $wiki ) {
+	$blacklist = get_blacklist();
+	$new_wiki = preg_replace("#\[\[Category:Hidden categories\]\]#", "", $wiki);
+	
+	foreach( $blacklist as $value ) {
+		$new_wiki = preg_replace($value, "", $new_wiki);
+	}
+	
+	return $new_wiki;
+}
 
+function get_blacklist() {
+	$url = 'http://commons.wikimedia.org/w/index.php?title=User:Multichill/Category_blacklist&action=raw';
+	$query = file_get_contents ( $url ) ;
+	
+	$query = preg_replace("#\:#", "", $query);
+	
+	$lines = explode( '\n', $query );
+	$output = array();
+	
+	foreach( $lines as $line ) {
+		if( substr( $line, 0, 1 ) != "*" ) continue;
+		$link = preg_replace("#\*#", "", $wiki);
+		$reg = '#'.$link.'#';
+		$output[] = $reg;
+	}
+	
+	return $output;
+}
 
 ?>

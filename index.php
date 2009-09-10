@@ -92,7 +92,7 @@ if ( !$ii_local->file_exists() ) {
 	endthis() ;
 }
 
-
+/*
 // Check if images exists at Commons under other name
 if( !$commons_to_project ) {
 	$alt = $ii_local->exists_elsewhere ( 'commons' , 'wikimedia' ) ;
@@ -120,7 +120,7 @@ if( !$commons_to_project ) {
 		print "</td></tr></table>" ;
 		endthis() ;
 	}
-}
+}*/
 
 // Check if target file exists
 if ( $ii_commons->file_exists() ) {
@@ -201,7 +201,7 @@ if ( count ( $ch->errors ) > 0 ) {
 	$allow_upload = false ;
 }
 
-$new_wiki = preg_replace("#\[\[Category:Hidden categories\]\]#", "", $new_wiki);
+$filterd_wiki = filter( $new_wiki );
 
 $limg = $ii_local->get_thumbnail_img ( $thumbnail_size ) ;
 $style = "background:#D0E6FF;padding:2px;border:2px solid #DDDDDD;width:100%" ;
@@ -218,7 +218,7 @@ if( $raw == 0 ) {
 <h3>Original wikitext</h3>
 <textarea rows='15' cols='125' style='$style;font-size:80%'><?PHP echo htmlspecialchars ( $orig_wiki ); ?></textarea>
 <h3>New wikitext</h3>
-<textarea rows='20' cols='125' style='$style' name='wpUploadDescription'><?PHP echo htmlspecialchars ( $new_wiki ); ?></textarea>
+<textarea rows='20' cols='125' style='$style' name='wpUploadDescription'><?PHP echo htmlspecialchars ( $filterd_wiki ); ?></textarea>
 </td>
 <td nowrap valign='top' style='padding-left:10px'><?PHP echo $limg; ?></td>
 </tr>
@@ -234,7 +234,7 @@ New filename : <input type='text' name='wpDestFile' size='80' value='<?PHP echo 
 <?PHP if( $raw_error != '' ) echo $raw_error.'<br />'; ?>
 New Wikitext:
 <br /><br />
-<!-- start new wikitext --><?PHP echo htmlspecialchars ( $new_wiki ); ?><!-- end new wikitext -->
+<!-- start new wikitext --><?PHP echo htmlspecialchars ( $filterd_wiki ); ?><!-- end new wikitext -->
 <br /><br />
 New Filename:
 <br /><br /> 
@@ -242,6 +242,7 @@ New Filename:
 <?PHP
 }
 
+$allow_upload = true;
 // Try direct upload
 if ( $use_tusc ) {
 	if( !$commons_to_project ) {
