@@ -177,6 +177,10 @@ class XML2wiki {
 				$ret .= '>' . $this->getsub ( $x ) . "</$ext>" ;
 			} else if ( $tag == 'MAGIC_VARIABLE' ) {
 				$ret .= '__' . $this->getsub ( $x ) . "__" ;
+			} else if ( $tag == 'FONT' or $tag == 'SMALL' ) {
+				$tag = strtolower ( $tag ) ;
+				$ret .= "<$tag " . $this->collapse_attributes ( $x ) ;
+				$ret .= '>' . $this->getsub ( $x ) . "</$tag>" ;
 			} else {
 				print "<b>UNKNOWN TAG : '$tag'! Please note this error, the project, language, and filename to <a href='http://en.wikipedia.org/wiki/User:Magnus_Manske'>the author</a> so it can be fixed!</b><br/>" ;
 				$ret .= '{{CommonsHelper2 malfunction}}' ;
