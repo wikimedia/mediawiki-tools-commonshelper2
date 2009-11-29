@@ -124,6 +124,14 @@ class XML2wiki {
 					$ret .= $this->getsub ( $x ) ;
 					$ret .= "</$tag>" ;
 				} else $ret .= "/>" ;
+			} else if ( $tag == 'SPAN' ) {
+				$ret .= "<$tag" ;
+				$ret .= $this->collapse_attributes ( $x ) ;
+				if ( !$x['sc'] ) {
+					$ret .= '>' ;
+					$ret .= $this->getsub ( $x ) ;
+					$ret .= "</$tag>" ;
+				} else $ret .= "/>" ;
 			} else if ( $tag == 'LIST' ) {
 				$type = $this->strip_attr_quotes ( $x['a']['type'] ) ;
 				$ret .= "\n" ;
