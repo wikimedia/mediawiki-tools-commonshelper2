@@ -11,7 +11,7 @@ class Upload {
 	
 	public function login( $username, $password ) {
 		$connect = fsockopen ($this->server, 80, $err_num, $err_str, 10);
-		
+
 		$message = "lgname=".urlencode($username)."&lgpassword=".urlencode($password);
 		
 		if( $connect ) {
@@ -47,14 +47,14 @@ Content-Length: ".strlen($message)."
 			$debug = fopen($debug_file, "w");
 			fwrite($debug, $answer);
 			fclose($debug);
-			
+
 			return unserialize( $data );
 		}
 	}
 	
 	public function upload( $url, $new_file, $desc, $filename ) {
 		$connect = fsockopen ($this->server, 80, $err_num, $err_str, 10);
-		
+
 		$token = $this->get_token();
 		
 		if( $connect ) {
@@ -94,7 +94,7 @@ Content-Length: ".strlen($message)."
 			foreach($match as $k=>$v) {
 				$this->cookies.=$v[1]."=".$v[2].";";
 			}
-			
+
 			$debug_file = $this->dir."debug.txt";
 			$debug = fopen($debug_file, "w");
 			fwrite($debug, $answer);

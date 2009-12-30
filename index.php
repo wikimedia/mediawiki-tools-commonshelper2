@@ -1,11 +1,12 @@
 <?PHP 
-
+ini_set('max_execution_time','120');
 error_reporting ( E_ALL ) ;
 
 require  ( './class.commonshelper.php' ) ;
 require  ( './class.imageinfo.php' ) ;
 require  ( './class.xml2wiki.php' ) ;
 require  ( './global_functions.php' ) ;
+require  ( './upload_class.php' ) ;
 
 // Evil global variables
 $tusc_url = "http://toolserver.org/~magnus/tusc.php" ;
@@ -91,7 +92,7 @@ if ( !$ii_local->file_exists() ) {
 	show_main_form() ;
 	endthis() ;
 }
-
+/*
 // Check if images exists at Commons under other name
 if( !$commons_to_project ) {
 	$alt = $ii_local->exists_elsewhere ( 'commons' , 'wikimedia' ) ;
@@ -119,7 +120,7 @@ if( !$commons_to_project ) {
 		print "</td></tr></table>" ;
 		endthis() ;
 	}
-}
+}*/
 
 // Check if target file exists
 if ( $ii_commons->file_exists() ) {
@@ -241,7 +242,7 @@ New Filename:
 <?PHP
 }
 
-$allow_upload = true;
+//$allow_upload = true;
 // Try direct upload
 if ( $use_tusc ) {
 	if( !$commons_to_project ) {
