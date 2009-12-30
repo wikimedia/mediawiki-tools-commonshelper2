@@ -92,7 +92,6 @@ if ( !$ii_local->file_exists() ) {
 	endthis() ;
 }
 
-/*
 // Check if images exists at Commons under other name
 if( !$commons_to_project ) {
 	$alt = $ii_local->exists_elsewhere ( 'commons' , 'wikimedia' ) ;
@@ -120,7 +119,7 @@ if( !$commons_to_project ) {
 		print "</td></tr></table>" ;
 		endthis() ;
 	}
-}*/
+}
 
 // Check if target file exists
 if ( $ii_commons->file_exists() ) {
