@@ -113,16 +113,6 @@ function do_direct_upload ( $lang , $project , $image , $newname , $external_url
 	$temp_dir = $temp_name . "-dir" ;
 	mkdir ( $temp_dir ) ;
 
-	// Copy remote file to local file
-	$short_file = 'dummy.' . array_pop ( explode ( '.' , $external_url ) ) ;
-	$local_file = $temp_dir . "/" . $short_file ;
-	if ( !copy($external_url, $local_file) ) {
-		rmdir ( $temp_dir ) ;
-		fclose ( $temp ) ;
-		unlink ( $temp_name ) ;
-		return "Error" ;
-	}
-	
 	// Prepare description
 	$desc = trim ( str_replace ( "== Summary ==" , "" , $desc ) ) ;
 	$desc = str_replace ( "\r" , "" , $desc ) ;
@@ -130,19 +120,12 @@ function do_direct_upload ( $lang , $project , $image , $newname , $external_url
 	$desc = str_replace ( "\n\n\n" , "\n\n" , $desc ) ;
 	$desc = "\n$desc" ;
 	
-	// Create meta file
-	$meta_file = $temp_dir . '/meta.txt' ;
-	$meta = @fopen ( $meta_file , "w" ) ;
-	fwrite ( $meta , $local_file . "\n" ) ;
-	fwrite ( $meta , $newname . "\n" ) ;
-	fwrite ( $meta , $desc ) ;
-	fclose ( $meta ) ;
-
-	// Run upload bot
-	$upload_bot = "./upload_bot.pl" ;
-	$command = "{$perl_command} {$upload_bot} {$temp_dir}" ;
-//	print $command ;
-	$output = shell_exec ( $command ) ;
+    // Upload class
+	$server = $lang.'.'.$project.'.org';
+	include_once ( '../upload_bot_key.php' );
+	$upload = new Upload( $server, $temp_dir );
+	$upload->login( 'CommonsHelper2 Bot', $upload_pass );	
+	$upload->upload( $external_url, $newname, $desc, $image );
 
 	// Cleanup
 	$debug_file = $temp_dir . "/debug.txt" ;
