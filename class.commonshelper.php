@@ -4,7 +4,7 @@
 class CommonsHelper {
 	public $language , $project , $file ;
 	public $used_templates ;
-	public $meta_tl , $meta_cat ;
+	public $meta_tl , $meta_cat , $meta_info ;
 	public $namespaces ;
 	public $errors ;
 	public $namespace_prefix ;
@@ -18,6 +18,7 @@ class CommonsHelper {
 		$this->file = $f ;
 		$this->meta_tl = Array () ;
 		$this->meta_cat = Array () ;
+		$this->meta_info = Array () ;
 		$this->errors = Array () ;
 		$this->namespaces = Array () ;
 		$this->namespace_prefix = "File:" ;
@@ -267,6 +268,16 @@ class CommonsHelper {
 					$l = ucfirst ( trim ( substr ( $l , 1 ) ) ) ;
 					$this->meta_tl[$h[3]][$this->unify_template_name($l)] = $l ;
 				}
+			} else if ( $h[2] == 'information' ) {
+				if ( $h[3] == 'template' ) {
+					if ( substr ( $l , 0 , 1 ) != '*' ) continue ;
+					$template = trim ( substr ( $l , 1 ) );
+					$this->meta_info['information']['template'] = $template;
+				} else if ( $h[3] == 'description' ) {
+					if ( substr ( $l , 0 , 1 ) != '*' ) continue ;
+					$description = trim ( substr ( $l , 1 ) );
+					$this->meta_info['information']['description'] = $description;
+				}
 			}
 		}
 		if ( ( count( $this->meta_cat ) < 1 ) && ( count( $this->meta_tl ) < 1 ) ) return array( 'return' => false, 'url' => str_replace( 'action=raw&', '', $url ) );
@@ -435,6 +446,9 @@ class CommonsHelper {
 		}
 	}
 	
+	public function get_information() {
+		return array( 'template' => $this->meta_info['information']['template'], 'description' => $this->meta_info['information']['description'] );
+	}
 }
 
 

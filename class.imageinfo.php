@@ -203,7 +203,21 @@ class ImageInfo {
 		// return $cats ;
 	}
 
-
+	public function get_information_data() {
+		$i = urlencode ( $this->image ) ;
+		$url = "http://{$this->language}.{$this->project}.org/w/api.php?action=query&titles=File:$i&prop=imageinfo&iiprop=timestamp|user&format=php" ;
+		$d = unserialize ( file_get_contents ( $url ) ) ;
+		$d = $d['query']['pages'] ;
+		$d = array_shift ( $d ) ;
+		$d = $d['imageinfo'] ;
+		$d = array_shift( $d );
+		$date = str_replace ( 'Z' , '' , $d['timestamp'] ) ;
+		$date = str_replace ( 'T' , ' ' , $date ) ;
+		$user = ':' . $this->language . ':User:' . $d['user'] . '|' . $d['user'] ;
+		if ( $this->project != 'wikipedia' ) $user = ':' . $this->project . $user ;
+		
+		return array( 'date' => $date, 'user' => $user, 'project' => $this->project, 'lang' => $this->language );
+	}
 }
 
 

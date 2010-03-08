@@ -26,6 +26,7 @@ $target_file = get_request ( 'target_file' ) ;
 $stage = get_request ( 'stage' ) ;
 $tusc_user = get_request ( 'tusc_user' ) ;
 $tusc_password = get_request ( 'tusc_password' ) ;
+$transfer_user = get_request ( 'transfer_user' ) ;
 
 $commons_to_project = get_request ( 'commons_to_project' , false ) ;
 $use_tusc = get_request ( 'use_tusc' , false ) ;
@@ -79,11 +80,18 @@ if( !$commons_to_project ) {
 }
 
 
+
 // Show initial form
 if ( $stage == '' ) {
 	$use_checkusage = get_request( 'use_checkusage', true ) ;
 	show_main_form () ;
 	endthis() ;
+}
+
+// Controll Username
+if( $transfer_user == "" ) {
+	show_error ( "You have not set a Commons-Username!" ) ;
+	endthis();
 }
 
 // Check if source file exists
@@ -185,7 +193,7 @@ $new_wiki .= "\n\n" . $ii_local->get_upload_history () ;
 
 // Append CheckUsage/WikiSense categories
 if ( $use_checkusage ) { // UNTESTED
-	$categories = $ii_local->common_sense ( $language , $image ) ;
+	$categories = $ii_local->common_sense ( $language ) ;
 	$new_wiki .= "\n\n<!-- Categories by CheckUsage -->" ;
 	foreach ( $categories AS $c ) {
 		$new_wiki .= "[[Category:$c]]\n" ;
@@ -204,12 +212,13 @@ if ( count ( $ch->errors ) > 0 ) {
 $filterd_wiki = filter( $new_wiki );
 $filterd_wiki = htmlspecialchars ( $filterd_wiki );
 $filterd_wiki = add_html ( $filterd_wiki );
+$output_wiki = controll_information( $filterd_wiki );
 
 $limg = $ii_local->get_thumbnail_img ( $thumbnail_size ) ;
 $style = "background:#D0E6FF;padding:2px;border:2px solid #DDDDDD;width:100%" ;
 
-if( !$commons_to_project ) $url = 'http://commons.wikimedia.org/w/index.php?title=Special:Upload'; 
-else $url = 'http://commons.wikimedia.org/w/index.php?title=Special:Upload';
+if( !$commons_to_project ) $url = "http://commons.wikimedia.org/w/index.php?title=Special:Upload"; 
+else $url = "http://{$language}.{$project}.org/w/index.php?title=Special:Upload";
 
 if( $raw == 0 ) {
 ?>
@@ -220,7 +229,11 @@ if( $raw == 0 ) {
 <h3>Original wikitext</h3>
 <textarea rows='15' cols='125' style='$style;font-size:80%'><?PHP echo htmlspecialchars ( $orig_wiki ); ?></textarea>
 <h3>New wikitext</h3>
-<textarea rows='20' cols='125' style='$style' name='wpUploadDescription'><?PHP echo $filterd_wiki; ?></textarea>
+<<<<<<< .mine
+<textarea rows='20' cols='125' style='$style' name='wpUploadDescription'><?PHP echo htmlspecialchars ( $output_wiki ); ?></textarea>
+=======
+<textarea rows='20' cols='125' style='$style' name='wpUploadDescription'><?PHP echo $output_wiki; ?></textarea>
+>>>>>>> .r28
 </td>
 <td nowrap valign='top' style='padding-left:10px'><?PHP echo $limg; ?></td>
 </tr>
@@ -236,7 +249,7 @@ New filename : <input type='text' name='wpDestFile' size='80' value='<?PHP echo 
 <?PHP if( $raw_error != '' ) echo $raw_error.'<br />'; ?>
 New Wikitext:
 <br /><br />
-<!-- start new wikitext --><?PHP echo htmlspecialchars ( $filterd_wiki ); ?><!-- end new wikitext -->
+<!-- start new wikitext --><?PHP echo htmlspecialchars ( $output_wiki ); ?><!-- end new wikitext -->
 <br /><br />
 New Filename:
 <br /><br /> 
@@ -244,13 +257,16 @@ New Filename:
 <?PHP
 }
 
+<<<<<<< .mine
+=======
 //$allow_upload = true;
+>>>>>>> .r28
 // Try direct upload
 if ( $use_tusc ) {
 	if( !$commons_to_project ) {
 		if ( verify_tusc ( $tusc_user , $tusc_password ) ) {
 			if ( $allow_upload ) {
-				$end = do_direct_upload ( $language , $project , $file , $target_file , $ii_local->idata['url'] , $new_wiki ) ;
+				$end = do_direct_upload ( $file , $target_file , $ii_local->idata['url'] , $new_wiki ) ;
 				echo $end;
 			} else {
 				show_error ( "Cannot upload directly because there are problem with the meta data (see above)!" ) ;
@@ -263,9 +279,5 @@ if ( $use_tusc ) {
 	}
 }
 
-
-
-
 endthis() ;
-
 ?>

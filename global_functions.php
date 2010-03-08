@@ -29,6 +29,7 @@ function show_main_form () {
 <tr><th>Project</th><td><input type='text' size='20' name='project' value='$project' /></td></tr>
 <tr><th>Source-File</th><td><input type='text' size='50' name='file' value='$file' /></td></tr>
 <tr><th>Target-File</th><td><input type='text' size='50' name='target_file' value='$target_file' /></td></tr>
+<tr><th>Commons-Username</th><td><input type='text' size='50' name='transfer_user' value='$transfer_user' /></td></tr>
 
 <tr><th>Commons to project</th><td><input type='checkbox' name='commons_to_project' id='commons_to_project' value='1' $cb_commons_to_project />
 <label for='commons_to_project'>Move file from commons to project</label></td></tr>
@@ -101,7 +102,7 @@ function verify_tusc ( $tusc_user , $tusc_password ) {
 }
 
 
-function do_direct_upload ( $lang , $project , $image , $newname , $external_url , $desc ) {
+function do_direct_upload ( $image , $newname , $external_url , $desc ) {
 	$perl_command = 'perl' ;
 	
 	// Make temporary file/dir
@@ -113,18 +114,21 @@ function do_direct_upload ( $lang , $project , $image , $newname , $external_url
 	$temp_dir = $temp_name . "-dir" ;
 	mkdir ( $temp_dir ) ;
 
-	// Prepare description
-	$desc = trim ( str_replace ( "== Summary ==" , "" , $desc ) ) ;
-	$desc = str_replace ( "\r" , "" , $desc ) ;
-	$desc = str_replace ( "\n>" , "\n >" , $desc ) ;
-	$desc = str_replace ( "\n\n\n" , "\n\n" , $desc ) ;
-	$desc = "\n$desc" ;
-	
     // Upload class
 	$server = $lang.'.'.$project.'.org';
 	include_once ( '../upload_bot_key.php' );
 	$upload = new Upload( $server, $temp_dir );
 	$upload->login( 'CommonsHelper2 Bot', $upload_pass );	
+	$upload->upload( $external_url, $newname, $desc, $image );
+
+	
+	$pass_file = "../upload_bot_key.txt";
+	$get_pass_file = fopen( $pass_file, "r" );
+	$pass = fread( $get_pass_file, 50 );
+	
+	$upload = new Upload( 'commons.wikimedia.org', $temp_dir );
+	$login = $upload->login( 'CommonsHelper2 Bot', 'Peter+Lustig1' );
+	var_dump( $login );
 	$upload->upload( $external_url, $newname, $desc, $image );
 
 	// Cleanup
@@ -172,6 +176,58 @@ function get_blacklist() {
 	}
 	
 	return $output;
+}
+
+
+function controll_information( $wiki ) {
+	global $ch, $ii_local, $transfer_user;
+	$meta_information = $ch->get_information();
+	$reg = '~\{\{'.$meta_information['template'].'~i';
+	if (preg_match($reg, $wiki)) {
+		return;
+	}
+	
+	$reg = '~==.*'.$meta_information['description'].'.*==(.*)==~i';
+	preg_match($reg , $wiki, $matches);
+	
+	$lines = explode( '\n', $wiki );
+	$found = false;
+	$desc = '';
+	var_dump( $matches );
+	
+	foreach( $lines as $line ) {
+		if ( substr ( $line , 0 , 2 ) == '==' ) {
+			$l = strtolower ( trim ( str_replace ( '=' , '' , $line ) ) );
+			if ( preg_match($meta_information['description'], $wiki) ) {
+				$found = true;
+				continue;
+			} elseif ( !preg_match($meta_information['description'], $wiki) && $found ) {
+				break;
+			} else {
+				continue;
+			}
+		}
+		if ( !$found ) continue;
+		$desc .= $line;
+	}
+	
+	$data = $ii_local->get_information_data();
+	$orignal_date = '(Original uploaded at '.$data['date'].')';
+	$date = date( 'Y-m-d H:i:s' );
+	$orignal_user = 'Original uploaded by [['.$data['user'].']]';
+	$transfer = '(Transfered by [[User:'.$transfer_user.'|'.$transfer_user.']])';
+
+	$information = '{{Information
+|description='.$desc.'
+|date='.$date.' '.$orignal_date .'
+|source=Original uploaded on '.$data['lang'].'.'.$data['project'].'
+|author='.$orignal_user.' '.$transfer.'
+}}
+';
+	echo $information;
+	$wiki = trim ( str_replace ( $desc , $information , $wiki ) ) ;
+	echo $wiki;
+	return $wiki;
 }
 
 function add_html( $wiki ) {
