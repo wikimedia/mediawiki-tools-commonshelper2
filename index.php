@@ -202,6 +202,8 @@ if ( count ( $ch->errors ) > 0 ) {
 }
 
 $filterd_wiki = filter( $new_wiki );
+$filterd_wiki = htmlspecialchars ( $filterd_wiki );
+$filterd_wiki = add_html ( $filterd_wiki );
 
 $limg = $ii_local->get_thumbnail_img ( $thumbnail_size ) ;
 $style = "background:#D0E6FF;padding:2px;border:2px solid #DDDDDD;width:100%" ;
@@ -218,7 +220,7 @@ if( $raw == 0 ) {
 <h3>Original wikitext</h3>
 <textarea rows='15' cols='125' style='$style;font-size:80%'><?PHP echo htmlspecialchars ( $orig_wiki ); ?></textarea>
 <h3>New wikitext</h3>
-<textarea rows='20' cols='125' style='$style' name='wpUploadDescription'><?PHP echo htmlspecialchars ( $filterd_wiki ); ?></textarea>
+<textarea rows='20' cols='125' style='$style' name='wpUploadDescription'><?PHP echo $filterd_wiki; ?></textarea>
 </td>
 <td nowrap valign='top' style='padding-left:10px'><?PHP echo $limg; ?></td>
 </tr>

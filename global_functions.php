@@ -174,4 +174,18 @@ function get_blacklist() {
 	return $output;
 }
 
+function add_html( $wiki ) {
+	$url = "http://meta.wikipedia.org/w/index.php?action=raw&title=CommonsHelper2/HTML";
+	$lines = explode ( "\n" , file_get_contents ( $url ) ) ;
+	
+	foreach( $lines as $l ) {
+		if ( substr ( $l , 0 , 1 ) != '*' ) continue ;
+		$t = trim( substr ( $l , 1 ) );
+		echo '@&lt;'.$t.'&gt;@i <'.$t.'>';
+		$wiki = preg_replace( '@&lt;'.$t.'&gt;@i', '<'.$t.'>', $wiki );
+	}
+
+	return $wiki;
+}
+
 ?>

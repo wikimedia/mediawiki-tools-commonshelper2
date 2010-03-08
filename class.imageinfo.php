@@ -158,7 +158,7 @@ class ImageInfo {
 		$lang2 = ( $lang == '' )? $this->language : $lang ;
 		$go = 'clean' ;
 		if ( $this->language != 'commons' ) {
-			$lang2 .= '.wikipedia' ;
+			$lang2 .= '.'.$this->project ;
 			$go = 'move' ;
 		}
 		
