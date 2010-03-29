@@ -271,9 +271,9 @@ function controll_information( $wiki ) {
 |author='.$orignal_user.' '.$transfer.'
 }}
 ';
-	echo $information;
+	//echo $information;
 	$wiki = trim ( str_replace ( $desc , $information , $wiki ) ) ;
-	echo $wiki;
+	//echo $wiki;
 	return $wiki;
 }
 
@@ -284,7 +284,7 @@ function add_html( $wiki ) {
 	foreach( $lines as $l ) {
 		if ( substr ( $l , 0 , 1 ) != '*' ) continue ;
 		$t = trim( substr ( $l , 1 ) );
-		echo '@&lt;'.$t.'&gt;@i <'.$t.'>';
+		//echo '@&lt;'.$t.'&gt;@i <'.$t.'>';
 		$wiki = preg_replace( '@&lt;'.$t.'&gt;@i', '<'.$t.'>', $wiki );
 	}
 

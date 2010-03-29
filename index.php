@@ -94,13 +94,13 @@ if ( $stage == '' ) {
 
 // Controll Username
 if( $transfer_user == "" ) {
-	show_error ( "You have not set a Commons-Username!" ) ;
+	show_error ( msg( 'error_transfer_usr' ) ) ;
 	endthis();
 }
 
 // Check if source file exists
 if ( !$ii_local->file_exists() ) {
-	show_error ( "Source file does not exist!" ) ;
+	show_error ( msg( 'error_not_exists' ) ) ;
 	show_main_form() ;
 	endthis() ;
 }
@@ -111,7 +111,7 @@ if( !$commons_to_project ) {
 	if ( $alt != '' ) {
 		$alt2 = array_pop ( explode ( ':' , $alt , 2 ) ) ;
 		$ii_commons = new ImageInfo ( 'commons' , 'wikimedia' , $alt2 ) ;
-		show_error ( "File already exists on Commons as \"<a href='http://commons.wikimedia.org/wiki/$alt'>$alt</a>\"!" ) ;
+		show_error ( msg( 'error_file_exists', "<a href='http://commons.wikimedia.org/wiki/$alt'>", "</a>", 'Commons', $alt ) );
 		print "<table><tr><td>" ;
 		print $ii_local->get_thumbnail_img ( $thumbnail_size ) ;
 		print "</td><td>" ;
@@ -124,7 +124,7 @@ if( !$commons_to_project ) {
 	if ( $alt != '' ) {
 		$alt2 = array_pop ( explode ( ':' , $alt , 2 ) ) ;
 		$ii_commons = new ImageInfo ( $language , $project , $alt2 ) ;
-		show_error ( "File already exists on the target wiki as \"<a href='http://{$language}.{$project}.org/wiki/$alt'>$alt</a>\"!" ) ;
+		show_error ( msg( 'error_file_exists', "<a href='http://commons.wikimedia.org/wiki/$alt'>", "</a>", msg( 'target_wiki' ), $alt ) );
 		print "<table><tr><td>" ;
 		print $ii_local->get_thumbnail_img ( $thumbnail_size ) ;
 		print "</td><td>" ;
@@ -136,7 +136,7 @@ if( !$commons_to_project ) {
 
 // Check if target file exists
 if ( $ii_commons->file_exists() ) {
-	show_error ( "Different target file exists on the target wiki under the same name!" ) ;
+	show_error ( msg( 'error_diff_exists' ) ) ;
 	print "<div style='float:right'>" ;
 	print $ii_local->get_thumbnail_img ( $thumbnail_size ) ;
 	print $ii_commons->get_thumbnail_img ( $thumbnail_size ) ;
@@ -152,7 +152,7 @@ $xml = $ch->get_xml () ;
 $meta_data = $ch->read_meta_data () ;
 
 if ( !$meta_data['return'] ) {
-	show_error ( 'No meta data found for the source wiki! <a href="'.$meta_data['url'].'">Link</a>' ) ;
+	show_error ( msg( 'error_no_meta', "<a href='".$meta_data['url']."'>", "</a>" ) ) ;
 }
 
 $allow_upload = false ;
@@ -165,11 +165,11 @@ $used_templates = $ii_local->get_used_templates() ;
 $ch->check_template_list ( $used_templates ) ;
 
 if ( !$ch->seen_good_template && !$commons_to_project ) {
-	show_error ( 'Meta-Data: No good templates found! <a href="'.$meta_data['url'].'">Link</a>' ) ;
+	show_error ( msg( 'error_meta_no_good', "<a href='".$meta_data['url']."'>", "</a>" ) ) ;
 } else $allow_upload = true ;
 
 if ( $ch->seen_bad_template && !$commons_to_project ) {
-	show_error ( 'Meta-Data: Bad template found! <a href="'.$meta_data['url'].'">Link</a>' ) ;
+	show_error ( msg( 'error_meta_bad', "<a href='".$meta_data['url']."'>", "</a>" ) ) ;
 	$allow_upload = false ;
 }
 
@@ -178,7 +178,7 @@ $used_categories = $ii_local->get_used_categories() ;
 $ch->check_category_list ( $used_categories ) ;
 
 if ( $ch->seen_bad_category && !$commons_to_project ) {
-	show_error ( 'Meta-Data: Bad categories found! <a href="'.$meta_data['url'].'">Link</a>' ) ;
+	show_error ( msg( 'error_meta_bad', "<a href='".$meta_data['url']."'>", "</a>" ) ) ;
 	$allow_upload = false ;
 }
 
@@ -230,22 +230,18 @@ if( $raw == 0 ) {
 <table style='width:100%'>
 <tr>
 <td style='width:100%'>
-<h3>Original wikitext</h3>
+<h3><?PHP echo msg( 'original_wikitext' ); ?></h3>
 <textarea rows='15' cols='125' style='$style;font-size:80%'><?PHP echo htmlspecialchars ( $orig_wiki ); ?></textarea>
-<h3>New wikitext</h3>
-<<<<<<< .mine
-<textarea rows='20' cols='125' style='$style' name='wpUploadDescription'><?PHP echo htmlspecialchars ( $output_wiki ); ?></textarea>
-=======
+<h3><?PHP echo msg( 'new_wikitext' ); ?></h3>
 <textarea rows='20' cols='125' style='$style' name='wpUploadDescription'><?PHP echo $output_wiki; ?></textarea>
->>>>>>> .r28
 </td>
 <td nowrap valign='top' style='padding-left:10px'><?PHP echo $limg; ?></td>
 </tr>
 </table>
 
-New filename : <input type='text' name='wpDestFile' size='80' value='<?PHP echo addslashes ( $target_file ); ?>' />
-<p>For manual upload, edit the above text (if necessary), save <a href='<?PHP echo $ii_local->idata['url'] ?>'>the file</a> on your computer, then 
-<input type='submit' name='up' value='upload it'/>.</p>
+<?PHP echo msg( 'new_filename' ); ?> <input type='text' name='wpDestFile' size='80' value='<?PHP echo addslashes ( $target_file ); ?>' />
+<p><?PHP echo msg( 'output_information', "<a href='".$ii_local->idata['url']."'>", "</a>" ); ?> 
+<input type='submit' name='up' value='<?PHP echo msg( 'upload_it' ); ?>'/>.</p>
 </form>
 <?PHP
 } else {
