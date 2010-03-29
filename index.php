@@ -57,7 +57,7 @@ header('Content-type: text/html; charset=utf-8');
 <h1 style='margin-top:0px;margin-bottom:0px;padding-bottom:0px;padding-right:5px'><?PHP echo msg( 'commonshelper2' ); ?></h1>
 </td>
 <td width='65%' valign='bottom'>
-<b><small><?PHP echo msg( 'discription' ); ?></small></b>
+<b><small><?PHP echo msg( 'description' ); ?></small></b>
 <br />
 <small><i><?PHP echo msg( 'change_meta', "<a href='http://meta.wikipedia.org/wiki/CommonsHelper2/Data_".$language.".".$project."'>", '</a>', $language.'.'.$project ); ?></i></small>
 </td>
