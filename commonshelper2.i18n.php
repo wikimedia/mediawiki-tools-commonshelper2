@@ -30,7 +30,7 @@ $message['en'] = array(
 	// Error
 	'error_transfer_usr' => 'You have not set a Commons-Username',
 	'error_not_exists'   => 'Source file does not exist!',
-	'error_file_exists'  => 'File already exists on $3 as "$1$4$2"!', // $1 and $2 are for the link tag (<a href=...> and </a>), $3 'Commons' or message 'target_wiki'
+	'error_file_exists'  => 'File already exists on $3 as "$1$4$2"!', // $1 and $2 are for the link tag (<a href=...> and </a>), $3 'Commons' or message 'target_wiki', $4 is the name of the file
 	'error_diff_exists'  => 'Different target file exists on the target wiki under the same name!',
 	'error_no_meta'      => 'No meta data found for the source wiki! $1Link$2',	// $1 and $2 are for the link tag (<a href=...> and </a>)
 	'error_meta_no_good' => 'Meta-Data: No good templates found! $1Link$2',	// $1 and $2 are for the link tag (<a href=...> and </a>)
