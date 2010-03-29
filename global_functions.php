@@ -106,6 +106,12 @@ function show_main_form () {
 }
 
 function endthis () {
+	global $user_lang;
+	
+	if( $user_lang == 'he' ) { 
+		echo '</span>';
+	}
+	
 	print "</body></html>" ;
 	exit ( 0 ) ;
 }
