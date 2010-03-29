@@ -1,5 +1,52 @@
 <?PHP
 
+function msg ( $msg, $replace1 = "", $replace2 = "", $replace3 = "", $replace4 = "" ) {
+	global $message, $user_lang;
+	
+	$replace = array();
+	
+	if( isset( $message[$user_lang][$msg] ) && $message[$user_lang][$msg] != "" ) {
+		$return = $message[$user_lang][$msg];
+	
+		if( $replace1 != "" ) {
+			$replace['$1'] = $replace1;
+		}
+		if( $replace2 != "" ) {
+			$replace['$2'] = $replace2;
+		}
+		if( $replace3 != "" ) {
+			$replace['$3'] = $replace3;
+		}
+		if( $replace4 != "" ) {
+			$replace['$4'] = $replace4;
+		}
+		
+		$return = strtr( $return, $replace );
+		
+		return $return;
+	}
+	else {
+		$return = $message['en'][$msg];
+	
+		if( $replace1 != "" ) {
+			$replace['$1'] = $replace1;
+		}
+		if( $replace2 != "" ) {
+			$replace['$2'] = $replace2;
+		}
+		if( $replace3 != "" ) {
+			$replace['$3'] = $replace3;
+		}
+		if( $replace4 != "" ) {
+			$replace['$4'] = $replace4;
+		}
+		
+		$return = strtr( $return, $replace );
+		
+		return $return;
+	}
+}
+
 function get_request ( $key , $default = '' ) {
 	$request = $_POST + $_GET;
 	if ( isset ( $request[$key] ) AND $request[$key] != "" ) return $request[$key] ;
@@ -14,7 +61,7 @@ function show_error ( $text ) {
 
 function show_main_form () {
 	global $language , $project , $file , $target_file ;
-	global $tusc_user , $tusc_password , $use_tusc ;
+	global $tusc_user , $tusc_password , $use_tusc, $transfer_user ;
 	global $use_checkusage , $remove_existing_categories, $commons_to_project ;//, $overwrite_existing ;
 	
 //	$cb_overwrite_existing = $overwrite_existing ? ' checked' : '' ;
@@ -23,27 +70,27 @@ function show_main_form () {
 	$cb_use_checkusage = $use_checkusage ? ' checked=checked' : '' ;
 	$cb_use_tusc = $use_tusc ? ' checked=checked' : '' ;
 	
-	print "<form method='post' action='./index.php'>
+	echo "<form method='post' action='./index.php'>
 <table border='1'>
-<tr><th>Language</th><td><input type='text' size='20' name='language' value='$language' /></td></tr>
-<tr><th>Project</th><td><input type='text' size='20' name='project' value='$project' /></td></tr>
-<tr><th>Source-File</th><td><input type='text' size='50' name='file' value='$file' /></td></tr>
-<tr><th>Target-File</th><td><input type='text' size='50' name='target_file' value='$target_file' /></td></tr>
-<tr><th>Commons-Username</th><td><input type='text' size='50' name='transfer_user' value='$transfer_user' /></td></tr>
+<tr><th>".msg( 'language' )."</th><td><input type='text' size='20' name='language' value='$language' /></td></tr>
+<tr><th>".msg( 'project' )."</th><td><input type='text' size='20' name='project' value='$project' /></td></tr>
+<tr><th>".msg( 'source_file' )."</th><td><input type='text' size='50' name='file' value='$file' /></td></tr>
+<tr><th>".msg( 'target_file' )."</th><td><input type='text' size='50' name='target_file' value='$target_file' /></td></tr>
+<tr><th>".msg( 'commons_username' )."</th><td><input type='text' size='50' name='transfer_user' value='$transfer_user' /></td></tr>
 
-<tr><th>Commons to project</th><td><input type='checkbox' name='commons_to_project' id='commons_to_project' value='1' $cb_commons_to_project />
-<label for='commons_to_project'>Move file from commons to project</label></td></tr>
+<tr><th>".msg( 'commons_to_project' )."</th><td><input type='checkbox' name='commons_to_project' id='commons_to_project' value='1' $cb_commons_to_project />
+<label for='commons_to_project'>".msg( 'move_file_from_com' )."</label></td></tr>
 
-<tr><th>Categories</th><td><input type='checkbox' name='remove_existing_categories' id='remove_existing_categories' value='1' $cb_remove_existing_categories />
-<label for='remove_existing_categories'>Remove existing categories</label></td></tr>
+<tr><th>".msg( 'categories' )."</th><td><input type='checkbox' name='remove_existing_categories' id='remove_existing_categories' value='1' $cb_remove_existing_categories />
+<label for='remove_existing_categories'>".msg( 'remove_cats' )."</label></td></tr>
 
-<tr><th>CheckUsage</th><td><input type='checkbox' name='use_checkusage' id='use_checkusage' value='1' $cb_use_checkusage />
-<label for='use_checkusage'>Use <a href='http://toolserver.org/~daniel/WikiSense/CheckUsage.php'>CheckUsage</a> to suggest new categories</label></td></tr>
+<tr><th>".msg( 'checkusage' )."</th><td><input type='checkbox' name='use_checkusage' id='use_checkusage' value='1' $cb_use_checkusage />
+<label for='use_checkusage'>".msg( 'use_checkusage', "<a href='http://toolserver.org/~daniel/WikiSense/CheckUsage.php'>", "</a>" )."</label></td></tr>
 
-<tr><th>TUSC</th><td><input type='checkbox' name='use_tusc' id='use_tusc' value='1' $cb_use_tusc />
-<label for='use_tusc'>Use <a href='http://toolserver.org/~magnus/tusc.php?language=commons&project=wikimedia'>TUSC</a> to transfer the file directly</label></td></tr>
-<tr><th>TUSC user name</th><td><input type='text' size='50' name='tusc_user' value='$tusc_user' /></td></tr>
-<tr><th>TUSC password</th><td><input type='password' size='50' name='tusc_password' value='$tusc_password' /></td></tr>
+<tr><th>".msg( 'tusc' )."</th><td><input type='checkbox' name='use_tusc' id='use_tusc' value='1' $cb_use_tusc />
+<label for='use_tusc'>".msg( 'use_tusc', "<a href='http://toolserver.org/~magnus/tusc.php?language=commons&project=wikimedia'>", "</a>" )."</label></td></tr>
+<tr><th>".msg( 'tusc_user' )."</th><td><input type='text' size='50' name='tusc_user' value='$tusc_user' /></td></tr>
+<tr><th>".msg( 'tusc_pass' )."</th><td><input type='password' size='50' name='tusc_password' value='$tusc_password' /></td></tr>
 
 
 <tr><td /><td><input type='submit' name='doit' value='Do it' /></td></tr>

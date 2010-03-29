@@ -7,6 +7,7 @@ require  ( './class.imageinfo.php' ) ;
 require  ( './class.xml2wiki.php' ) ;
 require  ( './global_functions.php' ) ;
 require  ( './upload_class.php' ) ;
+require  ( './commonshelper2.i18n.php' ) ;
 
 // Evil global variables
 $tusc_url = "http://toolserver.org/~magnus/tusc.php" ;
@@ -34,6 +35,9 @@ $use_checkusage = get_request ( 'use_checkusage' , false ) ;
 $remove_existing_categories = get_request ( 'remove_existing_categories' , false ) ;
 //$overwrite_existing = get_request ( 'overwrite_existing' , false ) ;
 
+// Language of user
+$user_lang = get_request ( 'user_lang' , 'en' ) ;
+
 $raw = get_request ( 'raw' , 0 ) ;
 $raw_error = '';
 
@@ -50,15 +54,15 @@ header('Content-type: text/html; charset=utf-8');
 <table style='background-color:#BAD0EF'>
 <tr>
 <td rowspan='2' nowrap>
-<h1 style='margin-top:0px;margin-bottom:0px;padding-bottom:0px;padding-right:5px'>CommonsHelper 2</h1>
+<h1 style='margin-top:0px;margin-bottom:0px;padding-bottom:0px;padding-right:5px'><?PHP echo msg( 'commonshelper2' ); ?></h1>
 </td>
-<td width='50%' valign='bottom'>
-<b><small>A tool to transfer files from Wikimedia projects to Wikimedia Commons</small></b>
+<td width='65%' valign='bottom'>
+<b><small><?PHP echo msg( 'discription' ); ?></small></b>
 <br />
-<small><i>Change the <a href='http://meta.wikipedia.org/wiki/CommonsHelper2/Data_<?PHP echo $language.'.'.$project; ?>'>category and template settings</a> for <?PHP echo $language.'.'.$project; ?></i></small>
+<small><i><?PHP echo msg( 'change_meta', "<a href='http://meta.wikipedia.org/wiki/CommonsHelper2/Data_".$language.".".$project."'>", '</a>', $language.'.'.$project ); ?></i></small>
 </td>
 <td align="right" width='50%' valign='bottom'>
-<small><a href='https://jira.toolserver.org/browse/CHTWO'>Report an Bug or Suggest Feature</a></small>
+<small><a href='https://jira.toolserver.org/browse/CHTWO'><?PHP echo msg( 'jira_link' ); ?></a></small>
 </td>
 </tr>
 </table>
@@ -257,10 +261,7 @@ New Filename:
 <?PHP
 }
 
-<<<<<<< .mine
-=======
 //$allow_upload = true;
->>>>>>> .r28
 // Try direct upload
 if ( $use_tusc ) {
 	if( !$commons_to_project ) {
