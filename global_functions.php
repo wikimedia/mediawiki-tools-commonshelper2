@@ -63,6 +63,7 @@ function show_main_form () {
 	global $language , $project , $file , $target_file ;
 	global $tusc_user , $tusc_password , $use_tusc, $transfer_user ;
 	global $use_checkusage , $remove_existing_categories, $commons_to_project ;//, $overwrite_existing ;
+	global $user_lang;
 	
 //	$cb_overwrite_existing = $overwrite_existing ? ' checked' : '' ;
 	$cb_commons_to_project = $commons_to_project ? ' checked=checked' : '' ;
@@ -95,6 +96,7 @@ function show_main_form () {
 
 <tr><td /><td><input type='submit' name='doit' value='Do it' /></td></tr>
 <input type='hidden' name='stage' value='init' />
+<input type='hidden' name='user_lang' value='".$user_lang."' />
 </table>
 </form>" ;
 
