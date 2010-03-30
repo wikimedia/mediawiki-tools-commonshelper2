@@ -83,7 +83,7 @@ $message['he'] = array(
 	'error_transfer_usr' => 'לא יצרת שם משתמש בוויקישיתוף',
 	'error_not_exists'   => 'קובץ המקור לא קיים!',
 	'error_file_exists'  => 'הקובץ כבר קיים ב־$3 בשם "$1$4$2"!', // $1 and $2 are for the link tag (<a href=...> and </a>), $3 'Commons' or message 'target_wiki', $4 is the name of the file
-	'error_diff_exists'  => 'קובץ שונה קוום באתר היעד באותו שם!',
+	'error_diff_exists'  => 'קובץ שונה קיים באתר היעד באותו שם!',
 	'error_no_meta'      => 'No meta data found for the source wiki! $1Link$2',	// $1 and $2 are for the link tag (<a href=...> and </a>)
 	'error_no_meta'      => 'לא נמצאו מטא־נתונים בוויקי המקור! $1Link$2',	// $1 and $2 are for the link tag (<a href=...> and </a>)
 	'error_meta_no_good' => 'מטא־נתונים: לא נמצאו תבניות קבילות! $1Link$2',	// $1 and $2 are for the link tag (<a href=...> and </a>)
