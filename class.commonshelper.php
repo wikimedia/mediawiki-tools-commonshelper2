@@ -378,6 +378,8 @@ class CommonsHelper {
 	}
 	
 	function iterate_template ( &$xml ) {
+		$in_list = false;
+	
 		if ( !isset ( $xml['s'] ) ) return ;
 		$argcnt = 0 ;
 		foreach ( $xml['s'] AS $k => $x ) {
@@ -385,18 +387,26 @@ class CommonsHelper {
 				$tn = $x['s'][0]['t'] ;
 //				print "!$tn<br/>" ;
 				if ( isset ( $this->meta_tl['bad'][$this->unify_template_name($tn)] ) ) {
+					$in_list = true;
 					$this->errors[] = "Template \"$tn\" is present in original description, preventing transfer to Commons." ;
 					$this->seen_bad_template = true ;
 					return ;
 				} else if ( isset ( $this->meta_tl['good'][$this->unify_template_name($tn)] ) ) {
+					$in_list = true;
 					$this->seen_good_template = true ;
 				} else if ( isset ( $this->meta_tl['remove'][$tn] ) ) {
+					$in_list = true;
 					$xml = array ( '?' => 't' , 't' => '' ) ; // Replacing template with empty text
 					return ;
-				} else if ( isset ( $this->meta_tl['transfer'][$tn] ) ) {
+				} 
+				
+				if ( isset ( $this->meta_tl['transfer'][$tn] ) ) {
+					$in_list = true;
 					$newname = $this->meta_tl['transfer'][$tn]['|'] ;
 					$xml['s'][$k]['s'][0]['t'] = $newname ;
-				} else return ; // This template is in no list, and will be kept as-is
+				} 
+				
+				if( !$in_list ) return ; // This template is in no list, and will be kept as-is
 			} else if ( $x['n'] == 'ARG' ) {
 				if ( count ( $x['a'] ) == 0 ) $argname = ++$argcnt ;
 				else $argname = $this->strip_attr_quotes ( $x['a']['name'] ) ;

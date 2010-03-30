@@ -192,7 +192,7 @@ if ( $ch->seen_bad_category && !$commons_to_project ) {
 if( !$commons_to_project ) {
 	$new_wiki = "{{BotMoveToCommons|{$language}.{$project}|year={{subst:CURRENTYEAR}}|month={{subst:CURRENTMONTHNAME}}|day={{subst:CURRENTDAY}}}}\n" ;
 	$new_wiki .= "The upload bot is [[User:CommonsHelper2 Bot]] which is called by [http://toolserver.org/~commonshelper2/index.php CommonsHelper2].\n" ;
-	$new_wiki .= "The tool and the bot are operated by [[User:Jan Luca]] and [[User:Magnus Manske]]."
+	$new_wiki .= "The tool and the bot are operated by [[User:Jan Luca]] and [[User:Magnus Manske]].";
 } else {
 	$new_wiki = "" ;
 }
@@ -224,6 +224,7 @@ $filterd_wiki = filter( $new_wiki );
 $filterd_wiki = htmlspecialchars ( $filterd_wiki );
 //$filterd_wiki = add_html ( $filterd_wiki );
 $output_wiki = controll_information( $filterd_wiki );
+$output_wiki = controll_template( $output_wiki );
 
 $limg = $ii_local->get_thumbnail_img ( $thumbnail_size ) ;
 $style = "background:#D0E6FF;padding:2px;border:2px solid #DDDDDD;width:100%" ;

@@ -259,6 +259,30 @@ function controll_information( $wiki ) {
 	return $wiki;
 }
 
+function controll_template( $wiki ) {
+	global $ii_local;
+	
+	$reg = '@\{\{Pd-self\}\}@is';
+	if (!preg_match($reg, $wiki)) {
+		return $wiki;
+	} else {
+		$data = $ii_local->get_information_data();
+		
+		$user = explode( '|', $data['user'] );
+		$user = array_pop( $user );
+		
+		if( $data['project'] == "wikipedia" ) {
+			$replace = "{{Pd-user|".$user."|".$data['lang']."}}";
+			str_replace( "{{Pd-self}}", $replace, $wiki );
+		} else {
+			$replace = "{{Pd-user|".$user."}}";
+			$wiki = preg_replace( $reg, $replace, $wiki );
+		}
+	}
+	
+	return $wiki;
+}
+
 function add_html( $wiki ) {
 	$url = "http://meta.wikipedia.org/w/index.php?action=raw&title=CommonsHelper2/HTML";
 	$lines = explode ( "\n" , file_get_contents ( $url ) ) ;
