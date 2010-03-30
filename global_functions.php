@@ -240,7 +240,7 @@ function controll_information( $wiki ) {
 	
 	$tz = date_default_timezone_get();
 	date_default_timezone_set('UTC'); 
-	$date = date( 'Y-m-d H:i:s (UTC)' );
+	$date = date( 'Y-m-d H:i:s' ).'(UTC)';
 	date_default_timezone_set($tz);
 	
 	$orignal_user = 'Original uploaded by [['.$data['user'].']]';

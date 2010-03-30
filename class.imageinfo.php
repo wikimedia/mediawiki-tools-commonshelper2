@@ -99,24 +99,24 @@ class ImageInfo {
 		
 		$desc_url = $this->get_description_page_url() ;
 		$w = "== Original upload history ==\n" ;
-		$w .= "This file was originally uploaded at {$source_name} as [$desc_url {$this->image}], before it was transfered to {$target_name}.\n" ;
-		$w .= "{| border='1'\n!Upload date!!User!!Bytes!!Dimensions!!Comment\n" ;
+		$w .= "This file was originally uploaded at {$source_name} as [$desc_url {$this->image}], before it was transfered to {$target_name}.\n\n" ;
+		$w .= "Upload date | User | Bytes | Dimensions | Comment\n\n" ;
 		
 		foreach ( $d AS $u ) {
 			$date = str_replace ( 'Z' , '' , $u['timestamp'] ) ;
 			$date = str_replace ( 'T' , ' ' , $date ) ;
 			$user = ':' . $this->language . ':User:' . $u['user'] . '|' . $u['user'] ;
 			if ( $this->project != 'wikipedia' ) $user = ':' . $this->project . $user ;
-			$w .= "|-\n" ;
-			$w .= '|nowrap|' . $date ;
-			$w .= '||nowrap|[[' . $user . ']]' ;
-			$w .= '||nowrap|' . $u['size'] ;
-			$w .= '||nowrap|' . $u['width'] . '&times;' . $u['height'] ;
-			$w .= '||<small><nowiki>' . str_replace ( "\n" , ' ' , $u['comment'] ) ;
+			$w .= "*" ;
+			$w .= $date.' | ' ;
+			$w .= '[[' . $user . ']] | ' ;
+			$w .= $u['size'].' | ' ;
+			$w .= $u['width'] . '&times;' . $u['height'].' | ' ;
+			$w .= '<small><nowiki>' . str_replace ( "\n" , ' ' , $u['comment'] ) ;
 			$w .= "</nowiki></small>\n" ;
 		}
 		
-		$w .= "|}\n" ;
+		$w .= "\n" ;
 		return $w ;
 	}
 	
