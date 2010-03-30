@@ -55,8 +55,8 @@ function get_request ( $key , $default = '' ) {
 
 function show_error ( $text ) {
 	global $raw, $raw_error;
-	if( $raw == 0 ) print "<div style='border:2px solid #888888;margin:2px;padding:5px;font-size:150%;color:red;text-align:center'><b>ATTENTION</b> : $text</div>" ;
-	else $raw_error .= "ATTENTION : $text<br />" ;
+	if( $raw == 0 ) print "<div style='border:2px solid #888888;margin:2px;padding:5px;font-size:150%;color:red;text-align:center'><b>".msg( 'attention' )."</b> : $text</div>" ;
+	else $raw_error .= msg( 'attention' )." : $text<br />" ;
 }
 
 function show_main_form () {
