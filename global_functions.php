@@ -158,39 +158,25 @@ function verify_tusc ( $tusc_user , $tusc_password ) {
 
 
 function do_direct_upload ( $image , $newname , $external_url , $desc ) {
-	$perl_command = 'perl' ;
-	
 	// Make temporary file/dir
-	$cwd = getcwd() ;
 	do {
-		$temp_name = tempnam ( "/tmp" , "ch" ) ;
+		$temp_name = tempnam ( "/tmp" , "ch2" ) ;
 		$temp = @fopen ( $temp_name , "w" ) ;
 	} while ( $temp === false ) ;
 	$temp_dir = $temp_name . "-dir" ;
 	mkdir ( $temp_dir ) ;
 
     // Upload class
-	$server = $lang.'.'.$project.'.org';
+	//$server = $lang.'.'.$project.'.org';
+	$server = "wiki.smallbusiness-webdesign.de";
 	include_once ( '../upload_bot_key.php' );
-	$upload = new Upload( $server, $temp_dir );
+	$upload = new Upload( $server, $temp_dir, /* "/w" */ "" );
 	$upload->login( 'CommonsHelper2 Bot', $upload_pass );	
-	$upload->upload( $external_url, $newname, $desc, $image );
-
-	
-	$pass_file = "../upload_bot_key.txt";
-	$get_pass_file = fopen( $pass_file, "r" );
-	$pass = fread( $get_pass_file, 50 );
-	
-	$upload = new Upload( 'commons.wikimedia.org', $temp_dir );
-	$login = $upload->login( 'CommonsHelper2 Bot', 'Peter+Lustig1' );
-	var_dump( $login );
-	$upload->upload( $external_url, $newname, $desc, $image );
+	$output = $upload->upload( $external_url, $newname, $desc, $image );
 
 	// Cleanup
 	$debug_file = $temp_dir . "/debug.txt" ;
 	@unlink ( $debug_file ) ;
-	unlink ( $meta_file ) ;
-	unlink ( $local_file ) ;
 	rmdir ( $temp_dir ) ;
 	fclose ( $temp ) ;
 	unlink ( $temp_name ) ;
@@ -241,34 +227,22 @@ function controll_information( $wiki ) {
 	if (preg_match($reg, $wiki)) {
 		return;
 	}
+		
+	//echo "<br />".$wiki."<br />"."<br />"."<br />";
+		
+	$reg = '@==+\s*'.preg_quote( $meta_information['description'] ).'\s*:*\s*==+(.*?)==@is';
+	preg_match($reg, $wiki, $match);
 	
-	$reg = '~==.*'.$meta_information['description'].'.*==(.*)==~i';
-	preg_match($reg , $wiki, $matches);
-	
-	$lines = explode( '\n', $wiki );
-	$found = false;
-	$desc = '';
-	var_dump( $matches );
-	
-	foreach( $lines as $line ) {
-		if ( substr ( $line , 0 , 2 ) == '==' ) {
-			$l = strtolower ( trim ( str_replace ( '=' , '' , $line ) ) );
-			if ( preg_match($meta_information['description'], $wiki) ) {
-				$found = true;
-				continue;
-			} elseif ( !preg_match($meta_information['description'], $wiki) && $found ) {
-				break;
-			} else {
-				continue;
-			}
-		}
-		if ( !$found ) continue;
-		$desc .= $line;
-	}
+	$desc = trim( $match[1] );
 	
 	$data = $ii_local->get_information_data();
 	$orignal_date = '(Original uploaded at '.$data['date'].')';
-	$date = date( 'Y-m-d H:i:s' );
+	
+	$tz = date_default_timezone_get();
+	date_default_timezone_set('UTC'); 
+	$date = date( 'Y-m-d H:i:s (UTC)' );
+	date_default_timezone_set($tz);
+	
 	$orignal_user = 'Original uploaded by [['.$data['user'].']]';
 	$transfer = '(Transfered by [[User:'.$transfer_user.'|'.$transfer_user.']])';
 
@@ -292,6 +266,8 @@ function add_html( $wiki ) {
 	foreach( $lines as $l ) {
 		if ( substr ( $l , 0 , 1 ) != '*' ) continue ;
 		$t = trim( substr ( $l , 1 ) );
+		echo '@\&lt\;'.$t.'\&gt\;@i <'.$t.'>';
+		$wiki = preg_replace( '@\&lt\;'.$t.'\&gt\;@i', '<'.$t.'>', $wiki );
 		//echo '@&lt;'.$t.'&gt;@i <'.$t.'>';
 		$wiki = preg_replace( '@&lt;'.$t.'&gt;@i', '<'.$t.'>', $wiki );
 	}

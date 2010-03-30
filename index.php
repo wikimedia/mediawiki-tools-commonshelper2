@@ -61,6 +61,10 @@ header('Content-type: text/html; charset=utf-8');
 <b><small><?PHP echo msg( 'description' ); ?></small></b>
 <br />
 <small><i><?PHP echo msg( 'change_meta', "<a href='http://meta.wikipedia.org/wiki/CommonsHelper2/Data_".$language.".".$project."'>", '</a>', $language.'.'.$project ); ?></i></small>
+<br />
+<small>
+<a href="index.php?user_lang=en">English</a> - <a href="index.php?user_lang=he">Hebrew</a>
+</small>
 </td>
 <td align="right" width='50%' valign='bottom'>
 <small><a href='https://jira.toolserver.org/browse/CHTWO'><?PHP echo msg( 'jira_link' ); ?></a></small>
@@ -105,7 +109,7 @@ if ( !$ii_local->file_exists() ) {
 	show_main_form() ;
 	endthis() ;
 }
-/*
+
 // Check if images exists at Commons under other name
 if( !$commons_to_project ) {
 	$alt = $ii_local->exists_elsewhere ( 'commons' , 'wikimedia' ) ;
@@ -133,7 +137,7 @@ if( !$commons_to_project ) {
 		print "</td></tr></table>" ;
 		endthis() ;
 	}
-}*/
+}
 
 // Check if target file exists
 if ( $ii_commons->file_exists() ) {
@@ -216,7 +220,7 @@ if ( count ( $ch->errors ) > 0 ) {
 
 $filterd_wiki = filter( $new_wiki );
 $filterd_wiki = htmlspecialchars ( $filterd_wiki );
-$filterd_wiki = add_html ( $filterd_wiki );
+//$filterd_wiki = add_html ( $filterd_wiki );
 $output_wiki = controll_information( $filterd_wiki );
 
 $limg = $ii_local->get_thumbnail_img ( $thumbnail_size ) ;
@@ -266,6 +270,8 @@ if ( $use_tusc ) {
 			if ( $allow_upload ) {
 				$end = do_direct_upload ( $file , $target_file , $ii_local->idata['url'] , $new_wiki ) ;
 				echo $end;
+			} elseif( !$allow_upload && $bot_blocked ) {
+				show_error ( "Bot is blocked on Commons." ) ;
 			} else {
 				show_error ( "Cannot upload directly because there are problem with the meta data (see above)!" ) ;
 			}
