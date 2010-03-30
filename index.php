@@ -191,6 +191,8 @@ if ( $ch->seen_bad_category && !$commons_to_project ) {
 // Regenerate wiki text from XML tree
 if( !$commons_to_project ) {
 	$new_wiki = "{{BotMoveToCommons|{$language}.{$project}|year={{subst:CURRENTYEAR}}|month={{subst:CURRENTMONTHNAME}}|day={{subst:CURRENTDAY}}}}\n" ;
+	$new_wiki .= "The upload bot is [[User:CommonsHelper2 Bot]] which is called by [http://toolserver.org/~commonshelper2/index.php CommonsHelper2].\n" ;
+	$new_wiki .= "The tool and the bot are operated by [[User:Jan Luca]] and [[User:Magnus Manske]]."
 } else {
 	$new_wiki = "" ;
 }
