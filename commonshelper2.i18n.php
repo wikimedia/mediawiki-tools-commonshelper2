@@ -5,7 +5,7 @@ $message = array();
 // English
 $message['en'] = array(
 	// Title
-    'attention'          => 'ATTENTION',
+	'attention'          => 'ATTENTION',
 	'commonshelper2'     => 'CommonsHelper 2',
 	'description'        => 'A tool to transfer files from Wikimedia projects to Wikimedia Commons',
 	'change_meta'        => 'Change the $1category and template settings$2 for $3', // $1 and $2 are for the link tag (<a href=...> and </a>), $3 for target wiki name
@@ -46,6 +46,10 @@ $message['en'] = array(
 	
 	// Misc
 	'target_wiki'        => 'the target wiki',
+	
+	// Standard values in Latin chars (for Maindesk and Metadata-Links)
+	'standard_language'  => 'en',
+	'standard_project'   => 'wikipedia',
 );
 
 // German
@@ -58,7 +62,7 @@ $message['de'] = array(
 // Hebrew
 $message['he'] = array(
 	// Title
-    'attention'          => 'לתשומת לבך',
+	'attention'          => 'לתשומת לבך',
 	'commonshelper2'     => 'CommonsHelper 2',
 	'description'        => 'כלי להעברת קבצים ממיזמים של קרן ויקימדיה לוויקישיתוף',
 	'change_meta'        => 'לשנות את $1הגדרות הקטגוריות והתבניות$2 עבור $3', // $1 and $2 are for the link tag (<a href=...> and </a>), $3 for target wiki name
@@ -101,6 +105,9 @@ $message['he'] = array(
 	
 	// Misc
 	'target_wiki'        => 'ויקי היעד',
+	
+	// Standard values in Latin chars (for Maindesk and Metadata-Links)
+	'standard_language'  => 'he',
 );
 
 ?>

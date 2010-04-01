@@ -2,6 +2,8 @@
 ini_set('max_execution_time','120');
 error_reporting ( E_ALL ) ;
 
+header( "Content-Type: text/html; charset=UTF-8";
+
 require  ( './class.commonshelper.php' ) ;
 require  ( './class.imageinfo.php' ) ;
 require  ( './class.xml2wiki.php' ) ;
@@ -20,8 +22,11 @@ $forbidden_commonsense_categories = array (
 // Initialize
 ini_set('user_agent','CommonsHelper 2'); # Fake user agent
 
-$language = get_request ( 'language' , 'en' ) ;
-$project = get_request ( 'project' , 'wikipedia' ) ;
+// Language of user
+$user_lang = get_request ( 'user_lang' , 'en' ) ;
+
+$language = get_request ( 'language' , msg( 'standard_language' ) ) ;
+$project = get_request ( 'project' , msg( 'standard_project' ) ) ;
 $file = get_request ( 'file' ) ;
 $target_file = get_request ( 'target_file' ) ;
 $stage = get_request ( 'stage' ) ;
@@ -34,9 +39,6 @@ $use_tusc = get_request ( 'use_tusc' , false ) ;
 $use_checkusage = get_request ( 'use_checkusage' , false ) ;
 $remove_existing_categories = get_request ( 'remove_existing_categories' , false ) ;
 //$overwrite_existing = get_request ( 'overwrite_existing' , false ) ;
-
-// Language of user
-$user_lang = get_request ( 'user_lang' , 'en' ) ;
 
 $raw = get_request ( 'raw' , 0 ) ;
 $raw_error = '';
