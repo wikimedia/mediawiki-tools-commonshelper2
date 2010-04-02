@@ -90,7 +90,6 @@ $message['he'] = array(
 	'error_not_exists'   => 'קובץ המקור לא קיים!',
 	'error_file_exists'  => 'הקובץ כבר קיים ב־$3 בשם "$1$4$2"!', // $1 and $2 are for the link tag (<a href=...> and </a>), $3 'Commons' or message 'target_wiki', $4 is the name of the file
 	'error_diff_exists'  => 'קובץ שונה קיים באתר היעד באותו שם!',
-	'error_no_meta'      => 'No meta data found for the source wiki! $1Link$2',	// $1 and $2 are for the link tag (<a href=...> and </a>)
 	'error_no_meta'      => 'לא נמצאו מטא־נתונים בוויקי המקור! $1Link$2',	// $1 and $2 are for the link tag (<a href=...> and </a>)
 	'error_meta_no_good' => 'מטא־נתונים: לא נמצאו תבניות קבילות! $1Link$2',	// $1 and $2 are for the link tag (<a href=...> and </a>)
 	'error_meta_bad'     => 'מטא־נתונים: נמצאו תבניות לא קבילות! $1Link$2',	// $1 and $2 are for the link tag (<a href=...> and </a>)
@@ -99,8 +98,7 @@ $message['he'] = array(
 	'original_wikitext'  => 'תיאור מקורי',
 	'new_wikitext'       => 'תיאור חדש',
 	'new_filename'       => 'שם קובץ חדש:',
-	'output_information' => 'For manual upload, edit the above text (if necessary), save $1the file$2 on your computer, then', // $1 and $2 are for the link tag (<a href=...> and </a>)
-	'output_information' => 'לשם העלאה ידנית יש לערוך את הטקסט למעלה (אם זה נחוץ), לשמור את הקובץ $1the file$2 על המחשב שלך ואז', // $1 and $2 are for the link tag (<a href=...> and </a>)
+	'output_information' => 'לשם העלאה ידנית יש לערוך את הטקסט למעלה (אם זה נחוץ), לשמור את $1הקובץ$2 במחשב שלך ואז', // $1 and $2 are for the link tag (<a href=...> and </a>)
 	'upload_it'          => 'להעלות אותו',
 	
 	// Misc
@@ -108,6 +106,7 @@ $message['he'] = array(
 	
 	// Standard values in Latin chars (for Maindesk and Metadata-Links)
 	'standard_language'  => 'he',
+	'standard_project'   => 'wikipedia',
 );
 
 ?>
