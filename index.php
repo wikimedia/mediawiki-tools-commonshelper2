@@ -2,7 +2,7 @@
 ini_set('max_execution_time','120');
 error_reporting ( E_ALL ) ;
 
-header( "Content-Type: text/html; charset=UTF-8";
+header( "Content-Type: text/html; charset=UTF-8" );
 
 require  ( './class.commonshelper.php' ) ;
 require  ( './class.imageinfo.php' ) ;
