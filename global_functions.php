@@ -94,7 +94,7 @@ function show_main_form () {
 <tr><th>".msg( 'tusc_pass' )."</th><td><input type='password' size='50' name='tusc_password' value='$tusc_password' /></td></tr>
 
 
-<tr><td /><td><input type='submit' name='doit' value='Do it' /></td></tr>
+<tr><td /><td><input type='submit' name='doit' value='".msg( 'do_it' )."' /></td></tr>
 <input type='hidden' name='stage' value='init' />
 <input type='hidden' name='user_lang' value='".$user_lang."' />
 </table>

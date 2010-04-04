@@ -27,6 +27,7 @@ $message['en'] = array(
 	'use_tusc'           => 'Use $1TUSC$2 to transfer the file directly', // $1 and $2 are for the link tag (<a href=...> and </a>)
 	'tusc_user'          => 'TUSC user name',
 	'tusc_pass'          => 'TUSC password',
+	'do_it'              => 'Do it',
 	
 	// Error
 	'error_transfer_usr' => 'You have not set a Commons-Username',
@@ -84,6 +85,7 @@ $message['he'] = array(
 	'use_tusc'           => 'להשתמש ב־$1TUSC$2 כדי להעביר את הקובץ ישירות', // $1 and $2 are for the link tag (<a href=...> and </a>)
 	'tusc_user'          => 'שם משתמש ב־TUSC',
 	'tusc_pass'          => 'סיסמה ב־TUSC',
+	'do_it'              => 'העברה',
 	
 	// Error
 	'error_transfer_usr' => 'לא יצרת שם משתמש בוויקישיתוף',
