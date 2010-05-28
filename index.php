@@ -189,18 +189,8 @@ if ( $ch->seen_bad_category && !$commons_to_project ) {
 	$allow_upload = false ;
 }
 
-
-// Regenerate wiki text from XML tree
-if( !$commons_to_project ) {
-	$new_wiki = "{{BotMoveToCommons|{$language}.{$project}|year={{subst:CURRENTYEAR}}|month={{subst:CURRENTMONTHNAME}}|day={{subst:CURRENTDAY}}}}\n" ;
-	$new_wiki .= "The upload bot is [[User:CommonsHelper2 Bot]] which is called by [http://toolserver.org/~commonshelper2/index.php CommonsHelper2].\n" ;
-	$new_wiki .= "The tool and the bot are operated by [[User:Jan Luca]] and [[User:Magnus Manske]].";
-} else {
-	$new_wiki = "" ;
-}
-
 $x2w = new XML2wiki () ;
-$new_wiki .= $x2w->convert ( $xml ) ;
+$new_wiki = $x2w->convert ( $xml ) ;
 $new_wiki .= "\n\n" . $ii_local->get_upload_history () ;
 
 
@@ -227,6 +217,16 @@ $filterd_wiki = htmlspecialchars ( $filterd_wiki );
 //$filterd_wiki = add_html ( $filterd_wiki );
 $output_wiki = controll_information( $filterd_wiki );
 $output_wiki = controll_template( $output_wiki );
+
+// Regenerate wiki text from XML tree
+if( !$commons_to_project ) {
+	$info_ch2 = "{{BotMoveToCommons|{$language}.{$project}|year={{subst:CURRENTYEAR}}|month={{subst:CURRENTMONTHNAME}}|day={{subst:CURRENTDAY}}}}\n" ;
+	if ( $use_tusc ) {
+		$info_ch2 .= "The upload bot is [[User:CommonsHelper2 Bot]] which is called by [http://toolserver.org/~commonshelper2/index.php CommonsHelper2].\n" ;
+	}
+	$info_ch2 .= "The tool and the bot are operated by [[User:Jan Luca]] and [[User:Magnus Manske]].\n\n";
+	$output_wiki = $info_ch2.$output_wiki;
+}
 
 $limg = $ii_local->get_thumbnail_img ( $thumbnail_size ) ;
 $style = "background:#D0E6FF;padding:2px;border:2px solid #DDDDDD;width:100%" ;
@@ -268,6 +268,7 @@ New Filename:
 }
 
 //$allow_upload = true;
+$bot_blocked = true;
 // Try direct upload
 if ( $use_tusc ) {
 	if( !$commons_to_project ) {

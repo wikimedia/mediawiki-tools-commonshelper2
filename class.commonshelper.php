@@ -378,13 +378,22 @@ class CommonsHelper {
 	}
 	
 	function iterate_template ( &$xml ) {
+		global $ii_local, $transfer_user;
+	
 		$in_list = false;
 	
 		if ( !isset ( $xml['s'] ) ) return ;
 		$argcnt = 0 ;
+		$is_information = false;
 		foreach ( $xml['s'] AS $k => $x ) {
 			if ( $x['n'] == 'TARGET' ) {
 				$tn = $x['s'][0]['t'] ;
+				if ( $x['n'] == 'TARGET' && isset ( $this->meta_tl['transfer'][$tn]['|'] ) && $this->meta_tl['transfer'][$tn]['|'] == "Information" ) {
+					$is_information = true;
+				} else {
+					$is_information = false;
+				}
+				
 //				print "!$tn<br/>" ;
 				if ( isset ( $this->meta_tl['bad'][$this->unify_template_name($tn)] ) ) {
 					$in_list = true;
@@ -445,12 +454,101 @@ class CommonsHelper {
 						)
 					) ) ;
 					
+					
+					
 					$x2w = new XML2wiki () ;
 					$wiki = trim ( $x2w->convert ( $xml['s'][$k]['s'] ) ) ;
 					// FIXME don't do that if parameter is empty
 					if ( $wiki != '' ) $xml['s'][$k]['s'] = $ns ;
 				}
-				
+
+				if ( $is_information ) {
+					$info_template_arg = $xml['s'][$k];
+					$info_template_arg_name = $info_template_arg['a']['name'];
+					$info_template_arg_name = str_replace( "'", "", $info_template_arg_name );
+					$info_template_data = $ii_local->get_information_data();
+
+					$tz = date_default_timezone_get();
+					date_default_timezone_set('UTC'); 
+					$date = 'Uploaded on Commons at '.date( 'Y-m-d H:i:s' ).' (UTC)';
+					date_default_timezone_set($tz);
+					$orignal_date = 'Original uploaded at '.$info_template_data['date'];
+					
+					$orignal_user = 'Original uploaded by ';
+					$transfer = 'Transfered by ';
+					
+					$text = "";
+					
+					if ( $info_template_arg_name == "source" OR $info_template_arg_name == "Source" ) {
+						$text = ' (Original uploaded on '.$info_template_data['lang'].'.'.$info_template_data['project'].')';
+						$xml['s'][$k]['s'][] = Array( "?"  => "t", 
+						                              "t"  => $text );
+					} elseif ( $info_template_arg_name == "date" OR $info_template_arg_name == "Date" ) {
+						$text = $text.' ('.$date.'/'.$orignal_date.')';
+						$xml['s'][$k]['s'][] = Array( "?"  => "t", 
+						                              "t"  => $text );
+					} elseif ( $info_template_arg_name == "author" OR $info_template_arg_name == "Author" ) {
+						$text = ' ('.$transfer;
+						$xml['s'][$k]['s'][] = Array( "?"  => "t", 
+						                              "t"  => $text );
+						
+						$xml['s'][$k]['s'][] = Array( "?"  => "x", 
+						                              "n"  => "TEMPLATE", 
+													  "a"  => Array ( ),
+													  "sc" => false, 
+													  "s"  => Array ( 
+													    Array( 
+													      "?"  => "x",
+														  "n"  => "TARGET",
+														  "a"  => Array ( ),
+														  "sc" => false,
+														  "s"  => Array( Array ( "?" => "t", "t" => "subst:CommonsHelper2/Link" ) )
+													    ),  
+                                                        Array( 
+													      "?"  => "x",
+														  "n"  => "ARG",
+														  "a"  => Array ( ),
+														  "sc" => false,
+														  "s"  => Array( Array ( "?" => "t", "t" => "User:".$transfer_user ) )
+													    ),  	
+														Array( 
+													      "?"  => "x",
+														  "n"  => "ARG",
+														  "a"  => Array ( ),
+														  "sc" => false,
+														  "s"  => Array( Array ( "?" => "t", "t" => $transfer_user ) )
+													    )  															
+												       )
+													);
+						
+						$text = '/'.$orignal_user;
+						$xml['s'][$k]['s'][] = Array( "?" => "t", "t" => $text );
+						
+						$xml['s'][$k]['s'][] = Array( "?"  => "x", 
+						                              "n"  => "LINK", 
+													  "sc" => false, 
+													  "s"  => Array ( 
+													    Array( 
+													      "?"  => "x",
+														  "n"  => "TARGET",
+														  "a"  => Array ( ),
+														  "sc" => false,
+														  "s"  => Array( Array ( "?" => "t", "t" => $info_template_data['user_wp'] ) )
+													    ),  
+                                                        Array( 
+													      "?"  => "x",
+														  "n"  => "PART",
+														  "a"  => Array ( ),
+														  "sc" => false,
+														  "s"  => Array( Array ( "?" => "t", "t" => $info_template_data['user_wp'] ) )
+													    )  														
+												       )
+													);
+
+						$text = ')';
+						$xml['s'][$k]['s'][] = Array( "?" => "t", "t" => $text );
+					}
+				}
 //				print "Translating argument $argname into $newname.<br/>" ;
 			} else print "BAD NAME : " . $x['n'] . "<br/>" ;
 		}

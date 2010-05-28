@@ -215,8 +215,9 @@ class ImageInfo {
 		$date = str_replace ( 'T' , ' ' , $date ) ;
 		$user = ':' . $this->language . ':User:' . $d['user'] . '|' . $d['user'] ;
 		if ( $this->project != 'wikipedia' ) $user = ':' . $this->project . $user ;
+		$user_wp = $d['user']; // wp = without prefix
 		
-		return array( 'date' => $date, 'user' => $user, 'project' => $this->project, 'lang' => $this->language );
+		return array( 'date' => $date, 'user' => $user, 'project' => $this->project, 'lang' => $this->language, 'user_wp' => $user_wp );
 	}
 }
 

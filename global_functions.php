@@ -221,17 +221,23 @@ function get_blacklist() {
 
 
 function controll_information( $wiki ) {
-	global $ch, $ii_local, $transfer_user;
+	global $ch, $ii_local, $transfer_user, $allow_upload;
 	$meta_information = $ch->get_information();
-	$reg = '~\{\{'.$meta_information['template'].'~i';
-	if (preg_match($reg, $wiki)) {
-		return;
+	if( isset( $meta_information['template'] ) && $meta_information['template'] != "" ) {
+		$reg = '~\{\{'.$meta_information['template'].'~i';
+		if (preg_match($reg, $wiki)) {
+			return $wiki;
+		}
 	}
 		
 	//echo "<br />".$wiki."<br />"."<br />"."<br />";
 		
 	$reg = '@==+\s*'.preg_quote( $meta_information['description'] ).'\s*:*\s*==+(.*?)==@is';
-	preg_match($reg, $wiki, $match);
+	
+	if( !preg_match($reg, $wiki, $match) ) {
+		show_error( "Cannot get description from the text" );
+		$allow_upload = false;
+	}
 	
 	$desc = trim( $match[1] );
 	
@@ -252,9 +258,10 @@ function controll_information( $wiki ) {
 |source=Original uploaded on '.$data['lang'].'.'.$data['project'].'
 |author='.$orignal_user.' '.$transfer.'
 }}
+
 ';
 	//echo $information;
-	$wiki = trim ( str_replace ( $desc , $information , $wiki ) ) ;
+	$wiki = trim ( $information.$wiki ) ;
 	//echo $wiki;
 	return $wiki;
 }
