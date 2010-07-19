@@ -98,7 +98,7 @@ class ImageInfo {
 		$target_name = ($this->language == 'commons' && $this->project == 'wikimedia')? 'this project' : 'Commons';
 		
 		$desc_url = $this->get_description_page_url() ;
-		$w = "== Original upload history ==\n" ;
+		$w = "== {{Original upload log}} ==\n" ;
 		$w .= "This file was originally uploaded at {$source_name} as [$desc_url {$this->image}], before it was transfered to {$target_name}.\n\n" ;
 		$w .= "Upload date | User | Bytes | Dimensions | Comment\n\n" ;
 		
