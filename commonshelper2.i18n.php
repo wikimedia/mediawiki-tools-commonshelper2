@@ -22,7 +22,7 @@ $message['en'] = array(
 	'categories'         => 'Categories',
 	'remove_cats'        => 'Remove existing categories',
 	'checkusage'         => 'CheckUsage',
-	'use_checkusage'     => 'Use $1CheckUsage$2 to suggest new categories', // $1 and $2 are for the link tag (<a href=...> and </a>)
+	'use_checkusage'     => 'Use $1CommonSense$2 to suggest new categories', // $1 and $2 are for the link tag (<a href=...> and </a>)
 	'tusc'               => 'TUSC',
 	'use_tusc'           => 'Use $1TUSC$2 to transfer the file directly', // $1 and $2 are for the link tag (<a href=...> and </a>)
 	'tusc_user'          => 'TUSC user name',

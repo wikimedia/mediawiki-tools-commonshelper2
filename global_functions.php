@@ -86,7 +86,7 @@ function show_main_form () {
 <label for='remove_existing_categories'>".msg( 'remove_cats' )."</label></td></tr>
 
 <tr><th>".msg( 'checkusage' )."</th><td><input type='checkbox' name='use_checkusage' id='use_checkusage' value='1' $cb_use_checkusage />
-<label for='use_checkusage'>".msg( 'use_checkusage', "<a href='http://toolserver.org/~daniel/WikiSense/CheckUsage.php'>", "</a>" )."</label></td></tr>
+<label for='use_checkusage'>".msg( 'use_checkusage', "<a href='http://toolserver.org/~daniel/WikiSense/CommonSense.php'>", "</a>" )."</label></td></tr>
 
 <tr><th>".msg( 'tusc' )."</th><td><input type='checkbox' name='use_tusc' id='use_tusc' value='1' $cb_use_tusc />
 <label for='use_tusc'>".msg( 'use_tusc', "<a href='http://toolserver.org/~magnus/tusc.php?language=commons&project=wikimedia'>", "</a>" )."</label></td></tr>

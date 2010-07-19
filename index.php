@@ -197,7 +197,7 @@ $new_wiki .= "\n\n" . $ii_local->get_upload_history () ;
 // Append CheckUsage/WikiSense categories
 if ( $use_checkusage ) { // UNTESTED
 	$categories = $ii_local->common_sense ( $language ) ;
-	$new_wiki .= "\n\n<!-- Categories by CheckUsage -->" ;
+	$new_wiki .= "\n\n<!-- Categories by CommonSense -->" ;
 	foreach ( $categories AS $c ) {
 		$new_wiki .= "[[Category:$c]]\n" ;
 	}
