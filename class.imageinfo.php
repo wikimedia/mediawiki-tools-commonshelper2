@@ -83,7 +83,7 @@ class ImageInfo {
 	}
 	
 	function get_description_page_url () {
-		return "http://{$this->language}.{$this->project}.org/wiki/File:" . urlencode ( $this->image ) ;
+		return "http://{$this->language}.{$this->project}.org/wiki/File:" . urlencode ( str_replace ( ' ' , '_' , $this->image ) ) ;
 	}
 	
 	function get_upload_history () {
