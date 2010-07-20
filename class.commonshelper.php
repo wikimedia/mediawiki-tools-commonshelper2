@@ -403,7 +403,7 @@ class CommonsHelper {
 				} else if ( isset ( $this->meta_tl['good'][$this->unify_template_name($tn)] ) ) {
 					$in_list = true;
 					$this->seen_good_template = true ;
-				} else if ( isset ( $this->meta_tl['remove'][$tn] ) ) {
+				} else if ( isset ( $this->meta_tl['remove'][$this->unify_template_name($tn)] ) ) {
 					$in_list = true;
 					$xml = array ( '?' => 't' , 't' => '' ) ; // Replacing template with empty text
 					return ;
