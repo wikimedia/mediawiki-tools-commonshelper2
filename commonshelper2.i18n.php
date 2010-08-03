@@ -51,6 +51,13 @@ $message['en'] = array(
 	// Standard values in Latin chars (for Maindesk and Metadata-Links)
 	'standard_language'  => 'en',
 	'standard_project'   => 'wikipedia',
+	
+	//Upload
+	'error_bot_blocked'  => 'Upload bot is blocked on Commons.',
+	'error_upload_meta'  => 'Cannot upload directly because there are problem with the meta data (see above)!',
+	'error_tusc_failed'  => 'TUSC verification failed!',
+	'error_only_commons' => 'Direct upload works only at commons!',
+	'upload_control_text'=> 'Please control the new wikitext and click "Upload!" if all is OK!',
 );
 
 // German

@@ -1,19 +1,56 @@
 <?PHP 
+//require_once  ( './global_functions.php' ) ;
+//require_once  ( './commonshelper2.i18n.php' ) ;
 
 class Upload {
 	public $server, $dir, $cookies, $server_dir;
 	
+	public $url, $new_filename, $desc;
+	
 	private $socket;
 	
-	public function __construct( $server, $dir, $server_dir ) {
+	public function __construct( $server, $dir, $server_dir, $url, $new_filename, $desc ) {
 		$this->server = $server;
 		$this->dir = $dir;
 		$this->cookies = '';
 		$this->server_dir = $server_dir;
+		$this->url = $url;
+		$this->new_filename = $new_filename;
+		$this->desc = $desc;
 		
 		if ( ( $this->socket = socket_create( AF_INET, SOCK_STREAM, SOL_TCP ) ) === false ) {
 			die ( "socket_create() has problem: Error: " . socket_strerror(socket_last_error()) );
 		}
+	}
+	
+	public function upload_control( $serialize, $thumbnail ) { ?>		
+<form method='post' action='index.php'>
+<table style='width:100%'>
+<tr>
+<td style='width:100%'><?PHP echo msg( 'upload_control_text' ); ?></td>
+</tr>
+<tr>
+<td style='width:100%'>
+<h3><?PHP echo msg( 'new_wikitext' ); ?></h3>
+<textarea rows='20' cols='125' style='background:#D0E6FF;padding:2px;border:2px solid #DDDDDD;width:100%' name='UploadDescription'><?PHP echo $this->desc; ?></textarea>
+</td>
+<td nowrap valign='top' style='padding-left:10px'><?PHP echo $thumbnail; ?></td>
+</tr>
+<tr>
+<td style='width:100%'><input type="hidden" name="stage" value="upload" />
+<input type="hidden" name="server" value="<?PHP echo $this->server ?>" />
+<input type="hidden" name="dir" value="<?PHP echo $this->dir ?>" />
+<input type="hidden" name="server_dir" value="<?PHP echo $this->server_dir ?>" />
+<input type="hidden" name="url" value="<?PHP echo $this->url ?>" />
+<input type="hidden" name="new_filename" value="<?PHP echo $this->new_filename ?>" />
+<input type="submit" value="Upload!" /></td>
+</tr>
+</table>
+	<?PHP
+	}
+	
+	public function setDesc( $desc ) {
+		$this->desc = $desc;
 	}
 	
 	public function login( $username, $password ) {
@@ -26,7 +63,7 @@ class Upload {
 		$query = "POST ".$this->server_dir."/api.php?format=php&action=login HTTP/1.1
 Host: ".$this->server."
 Cookie: ".$this->cookies."
-User-Agent: CommonsHelper2/1.0alpha (http://toolserver.org/~commonshelper2/index.php jan@toolserver.org) 
+User-Agent: CommonsHelper2/1.0 (http://toolserver.org/~commonshelper2/index.php jan@toolserver.org) 
 Content-Type: application/x-www-form-urlencoded
 Content-Length: ".strlen($message)."
 
@@ -71,7 +108,11 @@ Content-Length: ".strlen($message)."
 		var_dump( unserialize( $data ) );
 	}
 	
-	public function upload( $url, $new_file, $desc, $filename ) {
+	public function upload() {
+		$url = $this->url;
+		$new_file = $this->new_filename;
+		$desc = $this->desc;
+	
 		if ( ( socket_connect( $this->socket, $this->server, 80 ) ) === false ) {
 			die ( "socket_connect() has problem: Error: " . socket_strerror(socket_last_error()) );
 		}
@@ -87,7 +128,7 @@ ignorewarnings=1&filename=".urlencode($new_file)."&token=".urlencode($token)."&f
 		
 --commonshelper2
 Content-Type: application/octet-stream
-Content-Disposition: form-data; name=\"file\"; filename=\"".$filename."\"
+Content-Disposition: form-data; name=\"file\"; filename=\"".$new_file."\"
 
 ".$file."
 --commonshelper2--";
@@ -95,7 +136,7 @@ Content-Disposition: form-data; name=\"file\"; filename=\"".$filename."\"
 		$query = "POST ".$this->server_dir."/api.php?format=php&action=upload HTTP/1.1
 Host: ".$this->server."
 Cookie: ".$this->cookies."
-User-Agent: CommonsHelper2/1.0alpha (http://toolserver.org/~commonshelper2/index.php jan@toolserver.org)
+User-Agent: CommonsHelper2/1.0 (http://toolserver.org/~commonshelper2/index.php jan@toolserver.org)
 Content-Type: multipart/form-data; boundary=commonshelper2
 Content-Length: ".strlen($message)."
 
@@ -151,7 +192,7 @@ Content-Length: ".strlen($message)."
 		$query = "POST ".$this->server_dir."/api.php?format=php&action=query HTTP/1.1
 Host: ".$this->server."
 Cookie: ".$this->cookies."
-User-Agent: CommonsHelper2/1.0alpha (http://toolserver.org/~commonshelper2/index.php jan@toolserver.org)
+User-Agent: CommonsHelper2/1.0 (http://toolserver.org/~commonshelper2/index.php jan@toolserver.org)
 Content-Type: application/x-www-form-urlencoded
 Content-Length: ".strlen($message)."
 

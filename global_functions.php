@@ -157,7 +157,7 @@ function verify_tusc ( $tusc_user , $tusc_password ) {
 }
 
 
-function do_direct_upload ( $image , $newname , $external_url , $desc ) {
+function upload_control ( $newname , $external_url , $desc, $lang, $project, $thumbnail ) {
 	// Make temporary file/dir
 	do {
 		$temp_name = tempnam ( "/tmp" , "ch2" ) ;
@@ -167,12 +167,19 @@ function do_direct_upload ( $image , $newname , $external_url , $desc ) {
 	mkdir ( $temp_dir ) ;
 
     // Upload class
-	//$server = $lang.'.'.$project.'.org';
-	$server = "wiki.smallbusiness-webdesign.de";
+	$server = $lang.'.'.$project.'.org';
 	include_once ( '../upload_bot_key.php' );
-	$upload = new Upload( $server, $temp_dir, /* "/w" */ "" );
+	$upload = new Upload( $server, $temp_dir, '/w', $external_url, $newname, $desc );
+	$serialize = serialize( $upload );
+	$upload->upload_control( $serialize, $thumbnail );
+}
+
+function do_upload ( $upload ) {
+	include_once ( '../upload_bot_key.php' );
 	$upload->login( 'CommonsHelper2 Bot', $upload_pass );	
-	$output = $upload->upload( $external_url, $newname, $desc, $image );
+	$output = $upload->upload();
+	
+	$newname = $upload->new_filename;
 
 	// Cleanup
 	$debug_file = $temp_dir . "/debug.txt" ;

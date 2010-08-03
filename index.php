@@ -4,12 +4,12 @@ error_reporting ( E_ALL ) ;
 
 header( "Content-Type: text/html; charset=UTF-8" );
 
-require  ( './class.commonshelper.php' ) ;
-require  ( './class.imageinfo.php' ) ;
-require  ( './class.xml2wiki.php' ) ;
-require  ( './global_functions.php' ) ;
-require  ( './upload_class.php' ) ;
-require  ( './commonshelper2.i18n.php' ) ;
+require_once  ( './class.commonshelper.php' ) ;
+require_once  ( './class.imageinfo.php' ) ;
+require_once  ( './class.xml2wiki.php' ) ;
+require_once  ( './global_functions.php' ) ;
+require_once  ( './upload_class.php' ) ;
+require_once  ( './commonshelper2.i18n.php' ) ;
 
 // Evil global variables
 $tusc_url = "http://toolserver.org/~magnus/tusc.php" ;
@@ -90,7 +90,14 @@ if( !$commons_to_project ) {
 	$ii_commons = new ImageInfo ( $language , $project , $target_file ) ;
 }
 
-
+// Show initial form
+if ( $stage == 'upload' ) {
+	$upload_class = new Upload( get_request( 'server' ), get_request( 'dir' ), 
+		get_request( 'server_dir' ), get_request( 'url' ), 
+		get_request( 'new_filename' ), get_request( 'UploadDescription' ) );
+	do_upload( $upload_class );
+	endthis();
+}
 
 // Show initial form
 if ( $stage == '' ) {
@@ -234,7 +241,29 @@ $style = "background:#D0E6FF;padding:2px;border:2px solid #DDDDDD;width:100%" ;
 if( !$commons_to_project ) $url = "http://commons.wikimedia.org/w/index.php?title=Special:Upload"; 
 else $url = "http://{$language}.{$project}.org/w/index.php?title=Special:Upload";
 
-if( $raw == 0 ) {
+$upload_interface = false;
+if( $use_tusc ) {
+	//$bot_blocked = true;
+	//$allow_upload = false;
+	if( !$commons_to_project ) {
+		if ( verify_tusc ( $tusc_user , $tusc_password ) ) {
+			if ( $allow_upload ) {
+				$upload_interface = true;
+				upload_control ( $target_file , $ii_local->idata['url'] , $output_wiki, 'commons', 'wikimedia', $limg ) ;
+			} elseif( !$allow_upload && $bot_blocked ) {
+				show_error ( msg( 'error_bot_blocked' ) ) ;
+			} else {
+				show_error ( msg( 'error_upload_meta' ) ) ;
+			}
+		} else {
+			show_error ( msg( 'error_tusc_failed' ) ) ;
+		}
+	} else {
+		show_error ( msg( 'error_only_commons' ) ) ;
+	}
+} 
+
+if( $raw == 0 && !$upload_interface ) {
 ?>
 <form method='post' action='<?PHP echo $url; ?>'>
 <table style='width:100%'>
@@ -254,7 +283,7 @@ if( $raw == 0 ) {
 <input type='submit' name='up' value='<?PHP echo msg( 'upload_it' ); ?>'/>.</p>
 </form>
 <?PHP
-} else {
+} elseif( $raw > 0 ) {
 ?>
 <?PHP if( $raw_error != '' ) echo $raw_error.'<br />'; ?>
 New Wikitext:
@@ -265,28 +294,6 @@ New Filename:
 <br /><br /> 
 <!-- start new filename --><?PHP echo addslashes ( $target_file ); ?><!-- end new filename -->
 <?PHP
-}
-
-//$allow_upload = true;
-$bot_blocked = true;
-// Try direct upload
-if ( $use_tusc ) {
-	if( !$commons_to_project ) {
-		if ( verify_tusc ( $tusc_user , $tusc_password ) ) {
-			if ( $allow_upload ) {
-				$end = do_direct_upload ( $file , $target_file , $ii_local->idata['url'] , $new_wiki ) ;
-				echo $end;
-			} elseif( !$allow_upload && $bot_blocked ) {
-				show_error ( "Bot is blocked on Commons." ) ;
-			} else {
-				show_error ( "Cannot upload directly because there are problem with the meta data (see above)!" ) ;
-			}
-		} else {
-			show_error ( "TUSC verification failed!" ) ;
-		}
-	} else {
-		show_error ( "Direct upload works only at commons!" ) ;
-	}
 }
 
 endthis() ;
