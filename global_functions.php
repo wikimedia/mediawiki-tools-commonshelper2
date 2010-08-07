@@ -276,10 +276,12 @@ function controll_information( $wiki ) {
 function controll_template( $wiki ) {
 	global $ii_local;
 	
-	$reg = '@\{\{Pd-self\}\}@is';
+	$reg = '@\{\{Pd-self.*\}\}@is';
 	if (!preg_match($reg, $wiki)) {
+	echo "hi";
 		return $wiki;
 	} else {
+	echo "hi111";
 		$data = $ii_local->get_information_data();
 		
 		$user = explode( '|', $data['user'] );
@@ -287,7 +289,7 @@ function controll_template( $wiki ) {
 		
 		if( $data['project'] == "wikipedia" ) {
 			$replace = "{{Pd-user|".$user."|".$data['lang']."}}";
-			str_replace( "{{Pd-self}}", $replace, $wiki );
+			$wiki = preg_replace( $reg, $replace, $wiki );
 		} else {
 			$replace = "{{Pd-user|".$user."}}";
 			$wiki = preg_replace( $reg, $replace, $wiki );
