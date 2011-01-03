@@ -58,6 +58,8 @@ $message['en'] = array(
 	'error_tusc_failed'  => 'TUSC verification failed!',
 	'error_only_commons' => 'Direct upload works only at commons!',
 	'upload_control_text'=> 'Please control the new wikitext and click "Upload!" if all is OK!',
+	'error_commons_user' => 'To identify the transfer user, your Commons-Username have to be in the description!',
+	'error_upload_users' => 'The upload function is only to some users during the test time!',
 );
 
 // German

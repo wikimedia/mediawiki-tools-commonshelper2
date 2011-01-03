@@ -158,20 +158,10 @@ function verify_tusc ( $tusc_user , $tusc_password ) {
 
 
 function upload_control ( $newname , $external_url , $desc, $lang, $project, $thumbnail ) {
-	// Make temporary file/dir
-	do {
-		$temp_name = tempnam ( "/tmp" , "ch2" ) ;
-		$temp = @fopen ( $temp_name , "w" ) ;
-	} while ( $temp === false ) ;
-	$temp_dir = $temp_name . "-dir" ;
-	mkdir ( $temp_dir ) ;
-
     // Upload class
 	$server = $lang.'.'.$project.'.org';
-	include_once ( '../upload_bot_key.php' );
-	$upload = new Upload( $server, $temp_dir, '/w', $external_url, $newname, $desc );
-	$serialize = serialize( $upload );
-	$upload->upload_control( $serialize, $thumbnail );
+	$upload = new Upload( $server, '/w', $external_url, $newname, $desc );
+	$upload->upload_control( $thumbnail );
 }
 
 function do_upload ( $upload ) {
@@ -179,14 +169,7 @@ function do_upload ( $upload ) {
 	$upload->login( 'CommonsHelper2 Bot', $upload_pass );	
 	$output = $upload->upload();
 	
-	$newname = $upload->new_filename;
-
-	// Cleanup
-	$debug_file = $temp_dir . "/debug.txt" ;
-	@unlink ( $debug_file ) ;
-	rmdir ( $temp_dir ) ;
-	fclose ( $temp ) ;
-	unlink ( $temp_name ) ;
+	//$newname = $upload->new_filename;
 
 	// Output
 	$ret = "<h3>Output of upload bot</h3><pre>{$output}</pre>" ;
@@ -257,7 +240,7 @@ function controll_information( $wiki ) {
 	date_default_timezone_set($tz);
 	
 	$orignal_user = 'Original uploaded by [['.$data['user'].']]';
-	$transfer = '(Transfered by [[User:'.$transfer_user.'|'.$transfer_user.']])';
+	$transfer = '(Transferred by [[User:'.$transfer_user.'|'.$transfer_user.']])';
 
 	$information = '{{Information
 |description='.$desc.'
@@ -276,12 +259,10 @@ function controll_information( $wiki ) {
 function controll_template( $wiki ) {
 	global $ii_local;
 	
-	$reg = '@\{\{Pd-self.*\}\}@is';
+	$reg = '@\{\{Pd-self.*?\}\}@is';
 	if (!preg_match($reg, $wiki)) {
-	echo "hi";
 		return $wiki;
 	} else {
-	echo "hi111";
 		$data = $ii_local->get_information_data();
 		
 		$user = explode( '|', $data['user'] );

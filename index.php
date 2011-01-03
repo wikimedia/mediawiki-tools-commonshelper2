@@ -92,7 +92,7 @@ if( !$commons_to_project ) {
 
 // Show initial form
 if ( $stage == 'upload' ) {
-	$upload_class = new Upload( get_request( 'server' ), get_request( 'dir' ), 
+	$upload_class = new Upload( get_request( 'server' ), 
 		get_request( 'server_dir' ), get_request( 'url' ), 
 		get_request( 'new_filename' ), get_request( 'UploadDescription' ) );
 	do_upload( $upload_class );
@@ -243,15 +243,18 @@ else $url = "http://{$language}.{$project}.org/w/index.php?title=Special:Upload"
 
 $upload_interface = false;
 if( $use_tusc ) {
-	//$bot_blocked = true;
+	//$bot_blocked = true; 
 	//$allow_upload = false;
+	$upload_users = array( 'Jan Luca' );
 	if( !$commons_to_project ) {
 		if ( verify_tusc ( $tusc_user , $tusc_password ) ) {
-			if ( $allow_upload ) {
+			if ( $allow_upload && in_array( $tusc_user, $upload_users ) && !$bot_blocked ) {
 				$upload_interface = true;
 				upload_control ( $target_file , $ii_local->idata['url'] , $output_wiki, 'commons', 'wikimedia', $limg ) ;
-			} elseif( !$allow_upload && $bot_blocked ) {
+			} elseif( $bot_blocked ) {
 				show_error ( msg( 'error_bot_blocked' ) ) ;
+			} elseif( !in_array( $upload_users, $tusc_user ) ) {	
+				show_error ( msg( 'error_upload_users' ) ) ;
 			} else {
 				show_error ( msg( 'error_upload_meta' ) ) ;
 			}

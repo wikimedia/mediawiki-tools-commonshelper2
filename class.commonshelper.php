@@ -475,7 +475,7 @@ class CommonsHelper {
 					$orignal_date = 'Original uploaded at '.$info_template_data['date'];
 					
 					$orignal_user = 'Original uploaded by ';
-					$transfer = 'Transfered by ';
+					$transfer = 'Transferred by ';
 					
 					$text = "";
 					
