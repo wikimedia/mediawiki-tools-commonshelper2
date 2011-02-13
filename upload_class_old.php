@@ -6,9 +6,11 @@ class Upload {
 	
 	public $url, $new_filename, $desc;
 	
-	private $request;
+	private $request, $headers, $data;
+	private $readed_data = false;
 	
-	public function __construct( $server, $server_dir, $url, $new_filename, $desc ) {	
+	public function __construct( $server, $server_dir, $url, $new_filename, $desc ) {
+		xdebug_break();		
 		$this->server = $server;
 		$this->cookies = array();
 		$this->server_dir = $server_dir;
@@ -54,6 +56,18 @@ class Upload {
 	}
 	
 	public function login( $username, $password ) {
+		//$message = "lgname=".urlencode($username)."&lgpassword=".urlencode($password);
+				
+		/*$query = "POST ".$this->server_dir."/api.php?format=php&action=login HTTP/1.1
+Host: ".$this->server."
+Cookie: ".$this->cookies."
+User-Agent: CommonsHelper2/1.0 Beta (http://toolserver.org/~commonshelper2/index.php jan@toolserver.org) 
+Content-Type: application/x-www-form-urlencoded
+Content-Length: ".strlen($message)."
+
+".$message."
+\r\n\r\n";*/
+
 		$query_url = "http://".$this->server.$this->server_dir."/api.php?format=php&action=login";
 		$query_data = array( "lgname" => $username, "lgpassword" => $password );
 
@@ -64,11 +78,27 @@ class Upload {
 		$login_first = unserialize( $result['data'] );
 
 		$login_token = $login_first["login"]["token"];
+		
+		echo $login_token;
+
+		//$message = "lgname=".urlencode($username)."&lgpassword=".urlencode($password)."&lgtoken=".urlencode($login_token);
+				
+		/*$query = "POST ".$this->server_dir."/api.php?format=php&action=login HTTP/1.1
+Host: ".$this->server."
+Cookie: ".$this->cookies."
+User-Agent: CommonsHelper2/1.0 Beta (jan@toolserver.org)
+Content-Type: application/x-www-form-urlencoded
+Content-Length: ".strlen($message)."
+
+".$message."
+\r\n\r\n";*/
 
 		$query_url = "http://".$this->server.$this->server_dir."/api.php?format=php&action=login";
 		$query_data = array( "lgname" => $username, "lgpassword" => $password, "lgtoken" => $login_token );
 
 		$result = $this->query_http( $query_url, $query_data );
+		
+		var_dump( unserialize( $result['data'] ) );
 	}
 	
 	public function upload() {
@@ -81,6 +111,48 @@ class Upload {
 		$desc = $this->desc;
 
 		$token = $this->get_token();
+		/*
+		$file = file_get_contents( $url );
+		$boundary = "commonshelper2".time();
+
+--".$boundary."
+Content-Disposition: form-data; name=\"file\"
+
+".urlencode("file")."
+
+		$message = 
+"--".$boundary."
+Content-Disposition: form-data; name=\"ignorewarnings\"
+
+1
+--".$boundary."
+Content-Disposition: form-data; name=\"filename\"
+
+".$new_file."
+--".$boundary."
+Content-Disposition: form-data; name=\"comment\"
+
+".$desc."
+--".$boundary."
+Content-Disposition: form-data; name=\"token\"
+
+".$token."
+--".$boundary."
+Content-Type: application/octet-stream
+Content-Disposition: form-data; name=\"file\"; filename=\"".$new_file."\"
+
+".$file."
+--".$boundary."--";
+
+		$query = "POST ".$this->server_dir."/api.php?format=php&action=upload HTTP/1.1 
+Host: ".$this->server."
+Cookie: ".$this->cookies."
+User-Agent: CommonsHelper2/1.0 Beta (http://toolserver.org/~commonshelper2/index.php jan@toolserver.org)
+Content-Type: multipart/form-data; boundary=".$boundary."
+Content-Length: ".strlen($message)."
+
+".$message."
+\r\n\r\n"; */
 
 		do {
 			$temp_name = tempnam ( "/tmp" , "ch" ) ;
@@ -120,6 +192,18 @@ class Upload {
 	}
 	
 	private function get_token() {
+		//$message = "titles=Main%20Page&prop=info&intoken=edit";
+		
+		/*$query = "POST ".$this->server_dir."/api.php?format=php&action=query HTTP/1.1
+Host: ".$this->server."
+Cookie: ".$this->cookies."
+User-Agent: CommonsHelper2/1.0 Beta (http://toolserver.org/~commonshelper2/index.php jan@toolserver.org)
+Content-Type: application/x-www-form-urlencoded
+Content-Length: ".strlen($message)."
+
+".$message."
+\r\n\r\n";*/
+
 		$query_url = "http://".$this->server.$this->server_dir."/api.php?format=php&action=query";
 		$query_data = array( "titles" => "Main Page", "prop" => "info", "intoken" => "edit" );
 
@@ -158,8 +242,76 @@ class Upload {
 		$headers = $response->getHeader();
 		$data = $response->getBody();
 		$this->cookies = array_merge($this->cookies, $response->getCookies());
+		/*
+		$this->data = "";
 		
+		curl_setopt($this->curl, CURLOPT_URL, $url);
+		
+		curl_setopt( $this->curl, CURLOPT_USERAGENT, 
+		"CommonsHelper2/1.0 Beta (http://toolserver.org/~commonshelper2/index.php jan@toolserver.org)" );
+		
+		curl_setopt( $this->curl, CURLOPT_WRITEFUNCTION, array( &$this, 'query_http_data' ) );
+			
+		curl_setopt_array( $this->curl, $options );
+		echo "Hier ";
+		curl_exec( $this->curl );
+		echo "Hier 3";
+		echo $this->data;
+		if( $exit ) curl_exit( $this->curl );
+		
+		while( !$this->readed_data ) continue;
+		
+		$this->readed_data = false;
+		*/
 		return array( 'headers' => $header, 'data' => $data );
+	}
+	
+	function query_http_data( $curl, $data ) {
+		$this->data .= $data;
+		$len = strlen( $data );
+		$this->readed_data = true;
+		echo "Hier 2";
+		return $len;
+	}
+	
+	private function query_http_local( $query ) {
+		if ( ( $this->socket = socket_create( AF_INET, SOCK_STREAM, SOL_TCP ) ) === false ) {
+			die ( "socket_create() has problem: Error: " . socket_strerror(socket_last_error()) );
+		}
+		
+		if ( ( socket_connect( $this->socket, "localhost", 80 ) ) === false ) {
+			die ( "socket_connect() has problem: Error: " . socket_strerror(socket_last_error()) );
+		}
+
+		if ( ( socket_write( $this->socket, $query ) ) === false ) {
+			die ( "socket_connect() has problem: Error: " . socket_strerror(socket_last_error()) );
+		}
+		
+		$answer = "";
+		do {
+			if ( ( $buf = socket_read( $this->socket, 99999 ) ) === false ) {
+				die ( "socket_read() has problem: Error: " . socket_strerror(socket_last_error()) );
+			}
+	
+			$answer .= $buf;
+		} while( $buf != "" );
+		
+		if ( ( socket_close( $this->socket ) ) === false ) {
+			die ( "socket_connect() has problem: Error: " . socket_strerror(socket_last_error()) );
+		}
+			
+		preg_match ("/^(.*)\r\n\r\n/is",$answer,$match);
+		$headers = $match[1];
+			
+		preg_match ("/\r\n\r\n(.*)$/is",$answer,$match);
+		$data = $match[1];
+			
+		preg_match_all('@Set-Cookie: (.*)=(.*); (expires|path)(.*)@isU',$headers,$match,PREG_SET_ORDER);
+		foreach($match as $k=>$v) {
+			$this->cookies.=$v[1]."=".$v[2].";";
+		}
+		
+		return array( 'headers' => $headers, 'data' => $data );
 	}
 	
 	private function controll_desc() {
