@@ -2,6 +2,10 @@
 ini_set('max_execution_time','120');
 error_reporting ( E_ALL ) ;
 
+$pear_path = '/home/project/c/o/m/commonshelper2/pear';
+//$pear_path = 'C:\Program Files (x86)\Tools\Webserver\PHP\PEAR'; 
+set_include_path(get_include_path() . PATH_SEPARATOR . $pear_path);
+
 header( "Content-Type: text/html; charset=UTF-8" );
 
 require_once  ( './class.commonshelper.php' ) ;

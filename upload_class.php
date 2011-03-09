@@ -59,8 +59,6 @@ class Upload {
 
 		$result = $this->query_http( $query_url, $query_data );
 		
-		var_dump( unserialize( $result['data'] ) );
-		
 		$login_first = unserialize( $result['data'] );
 
 		$login_token = $login_first["login"]["token"];
@@ -108,10 +106,6 @@ class Upload {
 						'sendFilename' => $new_file);
 
 		$result = $this->query_http( $query_url, $query_data, $query_upload );
-		
-		echo $result['data'];
-		
-		var_dump( unserialize( $result['data'] ) );
 
 		unlink ( $local_file ) ;
 		rmdir ( $temp_dir ) ;
@@ -159,7 +153,7 @@ class Upload {
 		$data = $response->getBody();
 		$this->cookies = array_merge($this->cookies, $response->getCookies());
 		
-		return array( 'headers' => $header, 'data' => $data );
+		return array( 'headers' => $headers, 'data' => $data );
 	}
 	
 	private function controll_desc() {
