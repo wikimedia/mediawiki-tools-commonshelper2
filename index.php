@@ -99,7 +99,7 @@ if ( $stage == 'upload' ) {
 	$upload_class = new Upload( get_request( 'server' ), 
 		get_request( 'server_dir' ), get_request( 'url' ), 
 		get_request( 'new_filename' ), get_request( 'UploadDescription' ) );
-	do_upload( $upload_class );
+	echo do_upload( $upload_class );
 	endthis();
 }
 

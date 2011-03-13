@@ -172,10 +172,10 @@ function do_upload ( $upload ) {
 	//$newname = $upload->new_filename;
 
 	// Output
-	$ret = "<h3>Output of upload bot</h3><pre>{$output}</pre>" ;
+	//$ret = "<h3>Output of upload bot</h3><pre>{$output}</pre>" ;
 	$ret .= "<p>The image should now be at <a target='blank' href='" ;
-	$ret .= "http://commons.wikimedia.org/w/index.php?title=Image:".urlencode($newname)."'>{$newname}</a>. " ;
-	$ret .= "<a href=\"http://commons.wikimedia.org/w/index.php?action=edit&title=Image:$newname\" target=\"_blank\">Edit the new description page</a>." ;
+	$ret .= "http://commons.wikimedia.org/w/index.php?title=Image:".urlencode($upload->new_filename)."'>{$upload->new_filename}</a>. " ;
+	$ret .= "<a href=\"http://commons.wikimedia.org/w/index.php?action=edit&title=Image:urlencode($upload->new_filename)\" target=\"_blank\">Edit the new description page</a>." ;
 	return $ret ;	
 }
 
