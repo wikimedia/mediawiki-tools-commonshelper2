@@ -75,7 +75,7 @@ header('Content-type: text/html; charset=utf-8');
 <small><i><?PHP echo msg( 'change_meta', "<a href='http://meta.wikipedia.org/wiki/CommonsHelper2/Data_".$language.".".$project."'>", '</a>', $language.'.'.$project ); ?></i></small>
 <br />
 <small>
-<a href="index.php?user_lang=en">English</a> - <a href="index.php?user_lang=he">Hebrew</a>
+<?PHP echo $I18N->dashboardBacklink(); ?>
 </small>
 </td>
 <td align="right" width='50%' valign='bottom'>
