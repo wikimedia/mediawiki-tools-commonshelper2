@@ -1,9 +1,9 @@
 <?PHP
 // Initialize array for the languages
-$message = array();
+$messages = array();
 
 // English
-$message['en'] = array(
+$messages['en'] = array(
 	// Title
 	'attention'          => 'ATTENTION',
 	'commonshelper2'     => 'CommonsHelper 2',
@@ -64,14 +64,14 @@ $message['en'] = array(
 );
 
 // German
-$message['de'] = array(
+$messages['de'] = array(
 	// Title
 	'commonshelper2'     => 'CommonsHelper 2',
 	'description'        => 'Ein Tool, um Dateien von Wikimedia Projekten nach Wikimedia Commons zu transportieren',
 );
 
 // Hebrew
-$message['he'] = array(
+$messages['he'] = array(
 	// Title
 	'attention'          => 'לתשומת לבך',
 	'commonshelper2'     => 'CommonsHelper 2',

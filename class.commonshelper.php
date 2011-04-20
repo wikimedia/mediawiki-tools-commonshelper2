@@ -472,15 +472,15 @@ class CommonsHelper {
 					date_default_timezone_set('UTC'); 
 					$date = 'Uploaded on Commons at '.date( 'Y-m-d H:i:s' ).' (UTC)';
 					date_default_timezone_set($tz);
-					$orignal_date = 'Original uploaded at '.$info_template_data['date'];
+					$orignal_date = 'Originally uploaded at '.$info_template_data['date'];
 					
-					$orignal_user = 'Original uploaded by ';
+					$orignal_user = 'Originally uploaded by ';
 					$transfer = 'Transferred by ';
 					
 					$text = "";
 					
 					if ( $info_template_arg_name == "source" OR $info_template_arg_name == "Source" ) {
-						$text = ' (Original uploaded on '.$info_template_data['lang'].'.'.$info_template_data['project'].')';
+						$text = ' (Originally uploaded on '.$info_template_data['lang'].'.'.$info_template_data['project'].')';
 						$xml['s'][$k]['s'][] = Array( "?"  => "t", 
 						                              "t"  => $text );
 					} elseif ( $info_template_arg_name == "date" OR $info_template_arg_name == "Date" ) {

@@ -1,5 +1,6 @@
 <?PHP
 
+/*
 function msg ( $msg, $replace1 = "", $replace2 = "", $replace3 = "", $replace4 = "" ) {
 	global $message, $user_lang;
 	
@@ -45,6 +46,29 @@ function msg ( $msg, $replace1 = "", $replace2 = "", $replace3 = "", $replace4 =
 		
 		return $return;
 	}
+}
+*/ 
+
+function msg ($msg, $replace1 = "", $replace2 = "", $replace3 = "", $replace4 = "") {
+	global $I18N;
+	
+	$replace = array();
+
+	if( $replace1 != "" ) {
+		$replace[] = $replace1;
+	}	
+	if( $replace2 != "" ) {
+		$replace[] = $replace2;
+	}
+	if( $replace3 != "" ) {
+		$replace[] = $replace3;
+	}
+	if( $replace4 != "" ) {
+		$replace[] = $replace4;
+	}
+
+	$return = $I18N->msg($msg, array('variables' => $replace));
+	return $return;
 }
 
 function get_request ( $key , $default = '' ) {
@@ -175,7 +199,7 @@ function do_upload ( $upload ) {
 	//$ret = "<h3>Output of upload bot</h3><pre>{$output}</pre>" ;
 	$ret .= "<p>The image should now be at <a target='blank' href='" ;
 	$ret .= "http://commons.wikimedia.org/w/index.php?title=Image:".urlencode($upload->new_filename)."'>{$upload->new_filename}</a>. " ;
-	$ret .= "<a href=\"http://commons.wikimedia.org/w/index.php?action=edit&title=Image:urlencode($upload->new_filename)\" target=\"_blank\">Edit the new description page</a>." ;
+	$ret .= "<a href=\"http://commons.wikimedia.org/w/index.php?action=edit&title=Image:".urlencode($upload->new_filename)."\" target=\"_blank\">Edit the new description page</a>." ;
 	return $ret ;	
 }
 
@@ -222,36 +246,38 @@ function controll_information( $wiki ) {
 		
 	//echo "<br />".$wiki."<br />"."<br />"."<br />";
 		
-	$reg = '@==+\s*'.preg_quote( $meta_information['description'] ).'\s*:*\s*==+(.*?)==@is';
+	$reg = '@(==+\s*'.preg_quote( $meta_information['description'] ).'\s*:*\s*==+)(.*?)==@is';
 	
 	if( !preg_match($reg, $wiki, $match) ) {
 		show_error( "Cannot get description from the text" );
 		$allow_upload = false;
 	}
 	
-	$desc = trim( $match[1] );
+	$desc = trim( $match[2] );
 	
 	$data = $ii_local->get_information_data();
-	$orignal_date = '(Original uploaded at '.$data['date'].')';
+	$orignal_date = '(Originally uploaded at '.$data['date'].')';
 	
 	$tz = date_default_timezone_get();
 	date_default_timezone_set('UTC'); 
 	$date = date( 'Y-m-d H:i:s' ).'(UTC)';
 	date_default_timezone_set($tz);
 	
-	$orignal_user = 'Original uploaded by [['.$data['user'].']]';
+	$orignal_user = 'Originally uploaded by [['.$data['user'].']]';
 	$transfer = '(Transferred by [[User:'.$transfer_user.'|'.$transfer_user.']])';
 
-	$information = '{{Information
+	$information = '=={{int:filedesc}}==
+{{Information
 |description='.$desc.'
 |date='.$date.' '.$orignal_date .'
-|source=Original uploaded on '.$data['lang'].'.'.$data['project'].'
+|source=Originally uploaded on '.$data['lang'].'.'.$data['project'].'
 |author='.$orignal_user.' '.$transfer.'
 }}
 
 ';
 	//echo $information;
-	$wiki = trim ( $information.$wiki ) ;
+	//$wiki = trim ( $information.$wiki ) ;
+	$wiki = trim(str_replace($match[1].$match[2], $information, $wiki));
 	//echo $wiki;
 	return $wiki;
 }

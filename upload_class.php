@@ -99,7 +99,7 @@ class Upload {
 		}
 
 		$query_url = "http://".$this->server.$this->server_dir."/api.php?format=php&action=upload";
-		$query_data = array( "ignorewarnings" => "1", "filename" => $new_file, "comment" => $desc,
+		$query_data = array( "ignorewarnings" => "1", "filename" => $new_file, "text" => $desc,
 						"token" => $token );
 		$query_upload = array();
 		$query_upload[] = array('fieldName' => 'file', 'path' => $local_file, 

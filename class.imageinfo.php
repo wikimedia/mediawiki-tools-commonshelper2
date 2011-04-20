@@ -99,7 +99,7 @@ class ImageInfo {
 		
 		$desc_url = $this->get_description_page_url() ;
 		$w = "== {{Original upload log}} ==\n" ;
-		$w .= "This file was originally uploaded at {$source_name} as [$desc_url {$this->image}], before it was transfered to {$target_name}.\n\n" ;
+		$w .= "This file was originally uploaded at {$source_name} as [$desc_url {$this->image}], before it was transferred to {$target_name}.\n\n" ;
 		$w .= "Upload date | User | Bytes | Dimensions | Comment\n\n" ;
 		
 		foreach ( $d AS $u ) {
