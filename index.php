@@ -18,7 +18,7 @@ require_once  ( './upload_class.php' ) ;
 require_once( '/home/project/i/n/t/intuition/ToolserverI18N/ToolStart.php' );
 //require_once('lang/ToolStart.php');
 $I18N = new TsIntuition();
-$I18N->loadTextdomainFromFile( __DIR__ . '/commonshelper2.i18n.php', 'commonshelper2' );
+//$I18N->loadTextdomainFromFile( __DIR__ . '/commonshelper2.i18n.php', 'commonshelper2' );
 $I18N->setDomain( 'commonshelper2' );
 
 // Evil global variables
