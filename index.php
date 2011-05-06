@@ -292,8 +292,7 @@ if( $raw == 0 && !$upload_interface ) {
 </table>
 
 <?PHP echo msg( 'new_filename' ); ?> <input type='text' name='wpDestFile' size='80' value='<?PHP echo addslashes ( $target_file ); ?>' />
-<p><?PHP echo msg( 'output_information', "<a href='".$ii_local->idata['url']."'>", "</a>" ); ?> 
-<input type='submit' name='up' value='<?PHP echo msg( 'upload_it' ); ?>'/>.</p>
+<p><?PHP echo msg( 'output_information', "<a href='".$ii_local->idata['url']."'>", "</a>", "<input type='submit' name='up' value='", "'/>" ); ?></p>
 </form>
 <?PHP
 } elseif( $raw > 0 ) {
