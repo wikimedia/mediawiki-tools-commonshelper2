@@ -51,9 +51,19 @@ class ImageInfo {
 
 	function file_exists () {
 		$this->load_data () ;
-		if ( !isset ( $this->data ) ) return false ;
-		if ( isset ( $this->data[-1] ) ) return false ;
-		return true ;
+		if ( !isset ( $this->data ) ) return 1 ;
+		if ( isset ( $this->data[-1] ) ) {
+			$i = urlencode ( $this->image ) ;
+			$url = "http://commons.wikimedia.org/w/api.php?action=query&titles=File:$i&prop=imageinfo&iiprop=timestamp|user|comment|url|size|sha1|mime|metadata|archivename|bitdepth|url&iilimit=500&format=php" ;
+			$d = unserialize ( file_get_contents ( $url ) ) ;
+			$d = $d['query']['pages'] ;
+			if ( isset ( $d[-1] ) ) {
+				return 1;
+			} else {
+				return 2;
+			}
+		}
+		return 0 ;
 	}
 	
 	function get_thumbnail_img ( $tw = 128 , $th = -1 ) {

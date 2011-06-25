@@ -122,9 +122,17 @@ if( $transfer_user == "" ) {
 	endthis();
 }
 
+$fi_ex = $ii_local->file_exists();
 // Check if source file exists
-if ( !$ii_local->file_exists() ) {
+if ( $fi_ex === 1 ) {
 	show_error ( msg( 'error_not_exists' ) ) ;
+	show_main_form() ;
+	endthis() ;
+}
+
+// Check if source file exists
+if ( $fi_ex === 2 ) {
+	show_error ( msg( 'error_on_commons', "Commons" ) ) ;
 	show_main_form() ;
 	endthis() ;
 }
