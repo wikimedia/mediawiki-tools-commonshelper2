@@ -33,7 +33,7 @@ $forbidden_commonsense_categories = array (
 ini_set('user_agent','CommonsHelper 2'); # Fake user agent
 
 // Language of user
-$user_lang = get_request ( 'user_lang' , 'en' ) ;
+//$user_lang = get_request ( 'user_lang' , 'en' ) ;
 
 $language = get_request ( 'language' , msg( 'standard_language' ) ) ;
 $project = get_request ( 'project' , msg( 'standard_project' ) ) ;
@@ -63,7 +63,7 @@ header('Content-type: text/html; charset=utf-8');
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<?PHP if( $user_lang == 'he' ) { echo '<span lang="he" dir="rtl">'; } ?>
+<?PHP echo '<dir lang="'.$I18N->getLang().'" dir="'.$I18N->getDir().'">'; } ?>
 <table style='background-color:#BAD0EF'>
 <tr>
 <td rowspan='2' nowrap>
