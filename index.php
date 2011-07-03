@@ -63,7 +63,7 @@ header('Content-type: text/html; charset=utf-8');
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<?PHP echo '<dir lang="'.$I18N->getLang().'" dir="'.$I18N->getDir().'">'; } ?>
+<?PHP echo '<dir lang="'.$I18N->getLang().'" dir="'.$I18N->getDir().'">'; ?>
 <table style='background-color:#BAD0EF'>
 <tr>
 <td rowspan='2' nowrap>
