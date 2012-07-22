@@ -73,8 +73,10 @@ function msg ($msg, $replace1 = "", $replace2 = "", $replace3 = "", $replace4 = 
 
 function get_request ( $key , $default = '' ) {
 	$request = $_POST + $_GET;
-	if ( isset ( $request[$key] ) AND $request[$key] != "" ) return $request[$key] ;
-	return $default ;
+	if ( isset ( $request[$key] ) AND $request[$key] != "" ) { 
+		return htmlspecialchars( $request[$key], ENT_NOQUOTES ) ;
+	}
+	return htmlspecialchars( $default, ENT_NOQUOTES )  ;
 }
 
 function show_error ( $text ) {
