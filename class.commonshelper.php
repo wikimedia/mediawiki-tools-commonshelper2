@@ -234,7 +234,10 @@ class CommonsHelper {
 				$h[$k] = $l ;
 				if ( $h[3] != '' ) {
 					if ( $h[2] == 'categories' ) $this->meta_cat[$h[3]] = Array () ;
-					else if ( $h[2] == 'templates' ) $this->meta_tl[$h[3]] = Array () ;
+					else if ( $h[2] == 'templates' ) { 
+						$this->meta_tl[$h[3]] = Array () ;
+						$this->meta_tl['add'] = Array () ;
+					}
 				}
 				continue ;
 			}
@@ -253,16 +256,28 @@ class CommonsHelper {
 					$parts = explode ( '|' , $l[1] ) ;
 					$tn_commons = ucfirst ( trim ( array_shift ( $parts ) ) ) ;
 					$a = Array () ;
+					$add = array();
 					$a['|'] = $tn_commons ; // Commons template name
 					foreach ( $parts AS $p ) {
-						$p = explode ( '=' , $p ) ;
-						if ( count ( $p ) != 2 ) continue ;
-						$p_commons = trim ( $p[0] ) ;
-						$p_local = trim ( $p[1] ) ;
-						$a[$p_local] = $p_commons ;
+						$p_tr = trim( $p );
+						if( substr( $p_tr, 0, 1 ) == "+" ) {
+							$p = substr( $p_tr, 1 );
+							$p = explode( '=' , $p );
+							if( count( $p ) != 2 ) continue ;
+							$p_arg = trim( $p[0] );
+							$p_add = trim( $p[1] );
+							$add[$p_arg] = $p_add;
+						} else {
+							$p = explode ( '=' , $p ) ;
+							if ( count ( $p ) != 2 ) continue ;
+							$p_commons = trim ( $p[0] ) ;
+							$p_local = trim ( $p[1] ) ;
+							$a[$p_local] = $p_commons ;
+						}
 					}
 					
-					$this->meta_tl[$h[3]][$tn_local] = $a ;
+					$this->meta_tl[$h[3]][$this->unify_template_name($tn_local)] = $a ;
+					$this->meta_tl['add'][$this->unify_template_name($tn_local)] = $add;
 				} else {
 					if ( substr ( $l , 0 , 1 ) != '*' ) continue ;
 					$l = ucfirst ( trim ( substr ( $l , 1 ) ) ) ;
@@ -277,6 +292,10 @@ class CommonsHelper {
 					if ( substr ( $l , 0 , 1 ) != '*' ) continue ;
 					$description = trim ( substr ( $l , 1 ) );
 					$this->meta_info['information']['description'] = $description;
+				} else if ( $h[3] == 'licensing' ) {
+					if ( substr ( $l , 0 , 1 ) != '*' ) continue ;
+					$licensing = trim ( substr ( $l , 1 ) );
+					$this->meta_info['information']['licensing'] = $licensing;
 				}
 			}
 		}
@@ -409,17 +428,33 @@ class CommonsHelper {
 					return ;
 				} 
 				
-				if ( isset ( $this->meta_tl['transfer'][$tn] ) ) {
+				if ( isset ( $this->meta_tl['transfer'][$this->unify_template_name($tn)] ) ) {
 					$in_list = true;
-					$newname = $this->meta_tl['transfer'][$tn]['|'] ;
+					$newname = $this->meta_tl['transfer'][$this->unify_template_name($tn)]['|'] ;
 					$xml['s'][$k]['s'][0]['t'] = $newname ;
 				} 
+				
+				if( isset( $this->meta_tl['add'][$this->unify_template_name($tn)] ) ) {
+					$info_data = $ii_local->get_information_data();
+					foreach( $this->meta_tl['add'][$this->unify_template_name($tn)] AS $add_name => $add_value ) {
+						$add_value = str_replace( '%AUTHOR%', $info_data['user_wp'], $add_value );
+						$add_value = str_replace( '%TRANSFERUSER%', $transfer_user, $add_value );
+						$xml['s'][] = Array( 
+							"?"  => "x",
+							"n"  => "ARG",
+							"a"  => Array ( 'name' => $add_name ),
+							"sc" => false,
+							"s"  => Array( Array ( "?" => "t", "t" => $add_value ) )
+						);
+					}
+					continue;
+				}
 				
 				if( !$in_list ) return ; // This template is in no list, and will be kept as-is
 			} else if ( $x['n'] == 'ARG' ) {
 				if ( count ( $x['a'] ) == 0 ) $argname = ++$argcnt ;
 				else $argname = $this->strip_attr_quotes ( $x['a']['name'] ) ;
-//				print "Argument : $argname<br/>" ;
+//				print "Argument : $argname<br/>" ;				
 				if ( !isset ( $this->meta_tl['transfer'][$tn][$argname] ) ) continue ;
 				$newname = $this->meta_tl['transfer'][$tn][$argname] ;
 				$translate = false ;

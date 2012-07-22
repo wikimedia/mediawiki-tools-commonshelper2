@@ -63,7 +63,9 @@ header('Content-type: text/html; charset=utf-8');
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-<?PHP echo '<dir lang="'.$I18N->getLang().'" dir="'.$I18N->getDir().'">'; ?>
+<?PHP 
+echo '<span lang="'.$I18N->getLang().'" dir="'.$I18N->getDir().'">'; 
+?>
 <table style='background-color:#BAD0EF'>
 <tr>
 <td rowspan='2' nowrap>
@@ -79,7 +81,7 @@ header('Content-type: text/html; charset=utf-8');
 </small>
 </td>
 <td align="right" width='50%' valign='bottom'>
-<small><a href='https://jira.toolserver.org/browse/CHTWO'><?PHP echo msg( 'jira_link' ); ?></a></small>
+<small><a href='help.php'><?PHP echo msg( 'jira_link' ); ?></a></small>
 </td>
 </tr>
 </table>
@@ -245,9 +247,10 @@ $output_wiki = controll_template( $output_wiki );
 
 // Regenerate wiki text from XML tree
 if( !$commons_to_project ) {
-	$info_ch2 = "{{BotMoveToCommons|{$language}.{$project}|year={{subst:CURRENTYEAR}}|month={{subst:CURRENTMONTHNAME}}|day={{subst:CURRENTDAY}}}}\n" ;
 	if ( $use_tusc ) {
-		$info_ch2 .= "The upload bot is [[User:CommonsHelper2 Bot]] which is called by [http://toolserver.org/~commonshelper2/index.php CommonsHelper2].\n" ;
+		$info_ch2 = "{{CH2MoveToCommons|{$language}.{$project}|year={{subst:CURRENTYEAR}}|month={{subst:CURRENTMONTHNAME}}|day={{subst:CURRENTDAY}}}}\n" ;
+	} else {
+		$info_ch2 = "{{BotMoveToCommons|{$language}.{$project}|year={{subst:CURRENTYEAR}}|month={{subst:CURRENTMONTHNAME}}|day={{subst:CURRENTDAY}}}}\n" ;
 	}
 	$info_ch2 .= "The tool and the bot are operated by [[User:Jan Luca]] and [[User:Magnus Manske]].\n\n";
 	$output_wiki = $info_ch2.$output_wiki;
@@ -261,7 +264,7 @@ else $url = "http://{$language}.{$project}.org/w/index.php?title=Special:Upload"
 
 $upload_interface = false;
 if( $use_tusc ) {
-	//$bot_blocked = true; 
+	$bot_blocked = true; 
 	//$allow_upload = false;
 	$upload_users = array( 'Jan Luca', 'Blurpeace', 'Rehman', 'Amire80' );
 	if( !$commons_to_project ) {
@@ -305,7 +308,8 @@ if( $raw == 0 && !$upload_interface ) {
 <?PHP
 } elseif( $raw > 0 ) {
 ?>
-<?PHP if( $raw_error != '' ) echo $raw_error.'<br />'; ?>
+<?PHP if( $raw_error != '' ) 
+		echo "<!-- start raw error -->" . $raw_error . "<!-- end raw error -->"."<br />"; ?>
 New Wikitext:
 <br /><br />
 <!-- start new wikitext --><?PHP echo htmlspecialchars ( $output_wiki ); ?><!-- end new wikitext -->

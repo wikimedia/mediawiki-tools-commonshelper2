@@ -132,11 +132,15 @@ function show_main_form () {
 }
 
 function endthis () {
-	global $user_lang;
-
-	echo '</dir>';
+	global $raw, $raw_error;
+	if ( $raw == 0 ) {
+		echo '</span>';
 	
-	print "</body></html>" ;
+		print "</body></html>" ;
+	} else {
+		if( $raw_error != '' ) 
+		echo "<!-- start raw error -->" . $raw_error . "<!-- end raw error -->";
+	}
 	exit ( 0 ) ;
 }
 

@@ -57,6 +57,11 @@ class ImageInfo {
 			$url = "http://commons.wikimedia.org/w/api.php?action=query&titles=File:$i&prop=imageinfo&iiprop=timestamp|user|comment|url|size|sha1|mime|metadata|archivename|bitdepth|url&iilimit=500&format=php" ;
 			$d = unserialize ( file_get_contents ( $url ) ) ;
 			$d = $d['query']['pages'] ;
+			
+			if( isset( $d[-1]["missing"] ) ) {
+				return 0 ;
+			}
+			
 			if ( isset ( $d[-1] ) ) {
 				return 1;
 			} else {

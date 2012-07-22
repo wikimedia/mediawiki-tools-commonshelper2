@@ -42,7 +42,7 @@ class Upload {
 <input type="hidden" name="url" value="<?PHP echo $this->url; ?>" />
 <input type="hidden" name="new_filename" value="<?PHP echo $this->new_filename; ?>" />
 <input type="hidden" name="transfer_user" value="<?PHP echo $transfer_user; ?>" />
-<input type="submit" value="<?PHP echo msg('upload_bottum'); ?>" /></td>
+<input type="submit" value="<?PHP echo msg('upload_submit'); ?>" /></td>
 </tr>
 </table>
 </form>
