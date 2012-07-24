@@ -35,7 +35,7 @@ ini_set('user_agent','CommonsHelper 2'); # Fake user agent
 // Language of user
 //$user_lang = get_request ( 'user_lang' , 'en' ) ;
 
-$language = get_request ( 'language' , msg( 'standard_language' ) ) ;
+$language = get_request ( 'language' , $I18N->getLang() ) ;
 $project = get_request ( 'project' , msg( 'standard_project' ) ) ;
 $file = get_request ( 'file' ) ;
 $target_file = get_request ( 'target_file' ) ;
